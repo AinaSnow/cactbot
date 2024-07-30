@@ -11,22 +11,26 @@ const mtFireOutputStrings = {
   leftWedgeSafe: {
     en: '<= Left Wedge Safe',
     de: '<= Linker Spalt sicher',
-    fr: '<= Coin gauche sûr',
+    fr: '<= Cône gauche sûr',
     ja: '<= 左が安地',
     cn: '<= 左侧安全',
+    ko: '<= 왼쪽 안전',
   },
   middleWedgeSafe: {
     en: 'Middle Wedge Safe',
     de: 'Mittel Spalt sicher',
+    fr: 'Cône central sûr',
     ja: '中央が安地',
     cn: '中间安全',
+    ko: '가운데 안전',
   },
   rightWedgeSafe: {
     en: 'Right Wedge Safe =>',
     de: 'Rechter Spalt sicher =>',
-    fr: 'Coin droit sûr =>',
+    fr: 'Cône droit sûr =>',
     ja: '右が安地 =>',
     cn: '右侧安全 =>',
+    ko: '오른쪽 안전 =>',
   },
 };
 const bigAoeOutputStrings = {
@@ -36,6 +40,7 @@ const bigAoeOutputStrings = {
     fr: 'Coin devant',
     ja: '前方の角へ',
     cn: '前面角落',
+    ko: '앞쪽 구석으로',
   },
   donut: {
     en: 'Donut (In)',
@@ -43,6 +48,7 @@ const bigAoeOutputStrings = {
     fr: 'Donut (Intérieur)',
     ja: 'ドーナツの中へ',
     cn: '中间月环',
+    ko: '도넛 안으로',
   },
   out: Outputs.outOfMelee,
 };
@@ -147,6 +153,7 @@ Options.Triggers.push({
           fr: '${type} => Package avec votre partenaire',
           ja: '${type} => ペアで頭割り',
           cn: '${type} => 和搭档分摊',
+          ko: '${type} => 파트너 쉐어',
         },
       },
     },
@@ -196,9 +203,10 @@ Options.Triggers.push({
         soakSwap: {
           en: 'Tank Tower (soak/swap)',
           de: 'Tank Türme (nehmen/wechseln)',
-          fr: 'Tank tour (encaisser/swap)',
+          fr: 'Tank : Tour (encaisser/swap)',
           ja: 'タンク塔 (踏む/スイッチ)',
           cn: '双T轮换踩塔',
+          ko: '탱커 기둥 (밟기/교대)',
         },
       },
     },
@@ -254,6 +262,7 @@ Options.Triggers.push({
           fr: 'Tuez les adds + groupe sur les heals ${role}',
           ja: '雑魚を倒して + ヒラグループ ${role}',
           cn: '击杀小怪 + 治疗分摊组 ${role}',
+          ko: '쫄 잡기 + 힐러 그룹 ${role}',
         },
         tank: {
           en: '(be in front)',
@@ -261,6 +270,7 @@ Options.Triggers.push({
           fr: '(allez devant)',
           ja: '(前へ)',
           cn: '(站在最前面)',
+          ko: '(앞에 서기)',
         },
         nonTank: {
           en: '(behind tank)',
@@ -268,6 +278,7 @@ Options.Triggers.push({
           fr: '(derrière le tank)',
           ja: '(タンクの後ろへ)',
           cn: '(站坦克后面)',
+          ko: '(탱커 뒤에 서기)',
         },
       },
     },
@@ -367,6 +378,7 @@ Options.Triggers.push({
           fr: 'Tuez la plume => restez sur la tuile sûre',
           ja: '羽を壊す => 安全な床へ',
           cn: '击杀羽毛 => 站安全格内',
+          ko: '깃털 부수기 => 안전한 칸으로',
         },
       },
     },
@@ -388,7 +400,8 @@ Options.Triggers.push({
           de: 'Verteilen - auf schwebender Flächen',
           fr: 'Dispersion - tuile surélevée',
           ja: '散開 - 高台',
-          cn: '分散 - 高台格',
+          cn: '分散 - 浮空格',
+          ko: '산개 - 공중부양 칸',
         },
         lightning: {
           en: 'Spread - ground tile',
@@ -396,6 +409,7 @@ Options.Triggers.push({
           fr: 'Dispersion - tuile au sol',
           ja: '散開 - 地面',
           cn: '分散 - 地面格',
+          ko: '산개 - 지상 칸',
         },
       },
     },
@@ -424,6 +438,7 @@ Options.Triggers.push({
           fr: '${type} => attirez les puddles',
           ja: '${type} => 捨てて',
           cn: '${type} => 引导火圈',
+          ko: '${type} => 장판 유도',
         },
       },
     },
@@ -477,13 +492,16 @@ Options.Triggers.push({
           de: 'Spheren ausweichen - schwebende Fläche',
           fr: 'Évitez les sphères - tuile surélevée',
           ja: '玉を避ける - 高台',
+          cn: '躲开球 - 浮空格',
+          ko: '장판 피하기 - 공중부양 칸',
         },
         combo: {
           en: '${dir} - elevated tile',
           de: '${dir} - schwebende Fläche',
           fr: '${dir} - tuile surélevée',
           ja: '${dir} - 高台',
-          cn: '${dir} - 高台格',
+          cn: '${dir} - 浮空格',
+          ko: '${dir} - 공중부양 칸',
         },
         northFront: {
           en: 'North Row, Front Half',
@@ -491,6 +509,7 @@ Options.Triggers.push({
           fr: 'Ligne Nord, Moitié avant',
           ja: '北側の前方へ',
           cn: '上(北)行 前半',
+          ko: '북쪽 줄, 앞부분',
         },
         northBack: {
           en: 'North Row, Back Half',
@@ -498,6 +517,7 @@ Options.Triggers.push({
           fr: 'Ligne Nord, Moitié arrière',
           ja: '北側の後方へ',
           cn: '上(北)行 后半',
+          ko: '북쪽 줄, 뒷부분',
         },
         middleFront: {
           en: 'Middle Row, Front Half',
@@ -505,6 +525,7 @@ Options.Triggers.push({
           fr: 'Ligne centrale, Moitié avant',
           ja: '中央の前方へ',
           cn: '中间行 前半',
+          ko: '가운데 줄, 앞부분',
         },
         middleBack: {
           en: 'Middle Row, Back Half',
@@ -512,6 +533,7 @@ Options.Triggers.push({
           fr: 'Ligne centrale, Moitié arrière',
           ja: '中央の後方へ',
           cn: '中间行 后半',
+          ko: '가운데 줄, 뒷부분',
         },
         southFront: {
           en: 'South Row, Front Half',
@@ -519,6 +541,7 @@ Options.Triggers.push({
           fr: 'Ligne Sud, Moitié avant',
           ja: '南側の前方へ',
           cn: '下(南)行 前半',
+          ko: '남쪽 줄, 앞부분',
         },
         southBack: {
           en: 'South Row, Back Half',
@@ -526,6 +549,7 @@ Options.Triggers.push({
           fr: 'Ligne Sud, Moitié arrière',
           ja: '南側の後方へ',
           cn: '下(南)行 后半',
+          ko: '남쪽 줄, 뒷부분',
         },
       },
     },
@@ -550,7 +574,8 @@ Options.Triggers.push({
           de: 'Verteilen - auf schwebender Flächen',
           fr: 'Dispersion - tuile surélevée',
           ja: '散開 - 高台',
-          cn: '分散 - 高台格',
+          cn: '分散 - 浮空格',
+          ko: '산개 - 공중부양 칸',
         },
         lightning: {
           en: 'Spread - ground tile',
@@ -558,6 +583,7 @@ Options.Triggers.push({
           fr: 'Dispersion - tuile au sol',
           ja: '散開 - 地面',
           cn: '分散 - 地面格',
+          ko: '산개 - 지상 칸',
         },
       },
     },
@@ -577,6 +603,7 @@ Options.Triggers.push({
           fr: 'Prenez la Tour',
           ja: '塔を踏む',
           cn: '踩塔',
+          ko: '기둥 밟기',
         },
         avoidTower: {
           en: 'Avoid Tower',
@@ -584,6 +611,7 @@ Options.Triggers.push({
           fr: 'Évitez la tour',
           ja: '塔を避ける',
           cn: '远离塔',
+          ko: '기둥 피하기',
         },
       },
     },
@@ -680,6 +708,7 @@ Options.Triggers.push({
           fr: 'Arrière/Gauche',
           ja: '後ろ/左へ',
           cn: '左/后 安全',
+          ko: '뒤/왼쪽으로',
         },
         frontRight: {
           en: 'Be Front/Right',
@@ -687,6 +716,7 @@ Options.Triggers.push({
           fr: 'Devant/Droite',
           ja: '前/右へ',
           cn: '右/前 安全',
+          ko: '앞/오른쪽으로',
         },
         coneNWSafe: {
           en: 'NW Safe',
@@ -694,6 +724,7 @@ Options.Triggers.push({
           fr: 'NO Sûr',
           ja: '左上(北西) 安地',
           cn: '左上(西北) 安全',
+          ko: '왼쪽 위 안전',
         },
         coneNESafe: {
           en: 'NE Safe',
@@ -701,6 +732,7 @@ Options.Triggers.push({
           fr: 'NE Sûr',
           ja: '右上(北東) 安地',
           cn: '右上(东北) 安全',
+          ko: '오른쪽 위 안전',
         },
         unknown: {
           en: 'Dodge Avalanche',
@@ -708,6 +740,7 @@ Options.Triggers.push({
           fr: 'Esquivez l\'avalanche',
           ja: '雪崩を避けて',
           cn: '躲避雪崩',
+          ko: '눈사태 피하기',
         },
         combo: {
           en: '${type} - ${safe}',
@@ -715,6 +748,7 @@ Options.Triggers.push({
           fr: '${type} - ${safe}',
           ja: '${type} - ${safe}',
           cn: '${type} - ${safe}',
+          ko: '${type} - ${safe}',
         },
       },
     },
@@ -765,6 +799,7 @@ Options.Triggers.push({
           fr: '<= Allez à gauche (Esquivez l\'avalanche)',
           ja: '<= 左へ (雪崩を避けて)',
           cn: '<= 去左边 (躲避雪崩)',
+          ko: '<= 왼쪽으로 (눈사태 피하기)',
         },
         dodgeRight: {
           en: 'Go Right (Dodge Avalanche) =>',
@@ -772,6 +807,7 @@ Options.Triggers.push({
           fr: 'Allez à droite (Esquivez l\'avalanche) =>',
           ja: '右へ => (雪崩を避けて)',
           cn: '去右边 (躲避雪崩) =>',
+          ko: '오른쪽으로 (눈사태 피하기) =>',
         },
         unknown: {
           en: 'Dodge Avalanche',
@@ -779,6 +815,7 @@ Options.Triggers.push({
           fr: 'Esquivez l\'avalanche',
           ja: '雪崩を避けて',
           cn: '躲避雪崩',
+          ko: '눈사태 피하기',
         },
       },
     },
@@ -824,6 +861,7 @@ Options.Triggers.push({
           fr: '<= Allez à gauche (Esquivez l\'avalanche)',
           ja: '<= 左へ (雪崩を避けて)',
           cn: '<= 去左边 (躲避雪崩)',
+          ko: '<= 왼쪽으로 (눈사태 피하기)',
         },
         dodgeRight: {
           en: 'Go Right (Dodge Avalanche) =>',
@@ -831,6 +869,7 @@ Options.Triggers.push({
           fr: 'Allez à droite (Esquivez l\'avalanche) =>',
           ja: '右へ => (雪崩を避けて)',
           cn: '去右边 (躲避雪崩) =>',
+          ko: '오른쪽으로 (눈사태 피하기) =>',
         },
         unknown: {
           en: 'Dodge Avalanche',
@@ -838,6 +877,7 @@ Options.Triggers.push({
           fr: 'Esquivez l\'avalanche',
           ja: '雪崩を避けて',
           cn: '躲避雪崩',
+          ko: '눈사태 피하기',
         },
       },
     },
@@ -970,7 +1010,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'ja',
-      'missingTranslations': true,
       'replaceSync': {
         'Arcane Sphere': '立体魔法陣',
         'Feather of Ruin': 'ヴァリガルマンダの羽根',
