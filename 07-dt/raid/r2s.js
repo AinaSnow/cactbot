@@ -19,6 +19,59 @@ Options.Triggers.push({
   }),
   triggers: [
     {
+      id: 'R2S Beat Tracker',
+      type: 'StartsUsing',
+      netRegex: { id: ['9C24', '9C25', '9C26'], capture: true },
+      run: (data, matches) => {
+        if (matches.id === '9C24')
+          data.beat = 1;
+        else if (matches.id === '9C25')
+          data.beat = 2;
+        else
+          data.beat = 3;
+      },
+    },
+    {
+      id: 'R2S Heart Debuff',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['F52', 'F53', 'F54'], capture: true },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (data) => data.beat === 1 ? 17 : 0,
+      suppressSeconds: (data) => {
+        if (data.beat === 1)
+          return 120;
+        if (data.beat === 2)
+          return 70;
+        // We don't care about heart stacks during beat 3
+        return 9999;
+      },
+      infoText: (data, matches, output) => {
+        if (data.beat === 1) {
+          return output.beatOne();
+        }
+        if (data.beat === 2) {
+          if (matches.effectId === 'F52')
+            return output.beatTwoZeroHearts();
+          if (matches.effectId === 'F53')
+            return output.beatTwoOneHearts();
+        }
+      },
+      outputStrings: {
+        beatOne: {
+          en: 'Soak towers - need 2-3 hearts',
+          cn: '踩塔 - 踩到2-3颗心',
+        },
+        beatTwoZeroHearts: {
+          en: 'Puddles & Stacks',
+          cn: '集合分摊放圈',
+        },
+        beatTwoOneHearts: {
+          en: 'Spreads & Towers',
+          cn: '分散 / 踩塔',
+        },
+      },
+    },
+    {
       id: 'R2S Headmarker Shared Tankbuster',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.sharedBuster, capture: true },
@@ -68,6 +121,7 @@ Options.Triggers.push({
         text: {
           en: 'Stored Partners',
           de: 'Gespeichert: Partner',
+          ja: 'あとでペア',
           cn: '存储分摊',
         },
       },
@@ -82,6 +136,7 @@ Options.Triggers.push({
         text: {
           en: 'Stored Spread',
           de: 'Gespeichert: Verteilen',
+          ja: 'あとで散開',
           cn: '存储分散',
         },
       },
@@ -96,6 +151,7 @@ Options.Triggers.push({
         text: {
           en: 'Stored Partners',
           de: 'Gespeichert: Partner',
+          ja: 'あとでペア',
           cn: '存储分摊',
         },
       },
@@ -110,6 +166,7 @@ Options.Triggers.push({
         text: {
           en: 'Stored Spread',
           de: 'Gespeichert: Verteilen',
+          ja: 'あとで散開',
           cn: '存储分散',
         },
       },
@@ -140,11 +197,13 @@ Options.Triggers.push({
         spread: {
           en: 'Spread',
           de: 'Verteilen',
+          ja: '散開',
           cn: '分散',
         },
         partners: {
           en: 'Partners',
           de: 'Partner',
+          ja: 'ペア',
           cn: '分摊',
         },
         unknown: Outputs.unknown,
@@ -153,13 +212,13 @@ Options.Triggers.push({
     {
       id: 'R2S Honey Beeline',
       type: 'StartsUsing',
-      netRegex: { id: '9186', source: 'Honey B. Lovely', capture: false },
+      netRegex: { id: ['9186', '9B0C'], source: 'Honey B. Lovely', capture: false },
       response: Responses.goSides(),
     },
     {
       id: 'R2S Tempting Twist',
       type: 'StartsUsing',
-      netRegex: { id: '9187', source: 'Honey B. Lovely', capture: false },
+      netRegex: { id: ['9187', '9B0D'], source: 'Honey B. Lovely', capture: false },
       response: Responses.getUnder(),
     },
     {
@@ -196,6 +255,7 @@ Options.Triggers.push({
         text: {
           en: 'Under Intercards => Out => Cards',
           de: 'Rein Interkardinal => Raus => Kardinal',
+          ja: '斜め内側 => 外側 => 十字',
           cn: '内斜角 => 外斜角 => 外正点',
         },
       },
@@ -210,6 +270,7 @@ Options.Triggers.push({
         text: {
           en: 'Out Cards => Intercards => Under',
           de: 'Raus Kardinal => Interkardinal => Rein',
+          ja: '外十字 => 外斜め => 内側',
           cn: '外正点 => 外斜角 => 内斜角',
         },
       },
@@ -230,7 +291,6 @@ Options.Triggers.push({
   timelineReplace: [
     {
       'locale': 'de',
-      'missingTranslations': true,
       'replaceSync': {
         'Honey B. Lovely': 'Suzie Summ Honigsüß',
         'Sweetheart': 'honigsüß(?:e|er|es|en) Herz',
