@@ -32,14 +32,85 @@ const tagTeamOutputStrings = {
   ...Directions.outputStrings8Dir,
   safeDirs: {
     en: 'Safe: ${dirs} => ${last}',
+    de: 'Sicher: ${dirs} => ${last}',
+    fr: 'Sur : ${dirs} => ${last}',
+    ja: '安地: ${dirs} => ${last}',
+    cn: '安全区: ${dirs} => ${last}',
+    ko: '안전: ${dirs} => ${last}',
   },
   separator: {
     en: '/',
+    de: '/',
+    fr: '/',
+    ja: '/',
+    cn: '/',
+    ko: '/',
   },
 };
 Options.Triggers.push({
   id: 'AacLightHeavyweightM3Savage',
   zoneId: ZoneId.AacLightHeavyweightM3Savage,
+  config: [
+    {
+      id: 'barbarousBarrageKnockback',
+      name: {
+        en: 'Barbarous Barrage Uptime Knockback',
+        de: 'Brutalo-Bomben Uptime Rückstoß',
+        fr: 'Bombardement Brutal Anti-poussée Uptime',
+        ja: 'ボンバリアンボムのアムレン/堅実 限界タイミング通知',
+        cn: '击退塔uptime打法击退提示时机调整功能',
+        ko: '봄바리안 봄 업타임 넉백 설정',
+      },
+      comment: {
+        en: 'Select towers to dodge with knockback immunity.',
+        de: 'Wähle welche Türme mit Rückstoß-Immunität genommen werden.',
+        fr: 'Sélectionnez les tours à esquiver avec l\'anti-repoussement.',
+        ja: '吹き飛ばし無効で避ける塔を選択してください',
+        cn: '选择防击退覆盖的塔。',
+        ko: '넉백 무효기술로 처리할 기둥을 선택하세요.',
+      },
+      type: 'select',
+      options: {
+        en: {
+          'None (No Callout)': 'none',
+          'First Tower': 'first',
+          'First Two Towers (Recommended)': 'two',
+          'All three towers': 'all',
+        },
+        de: {
+          'Keine (keine Ansage)': 'none',
+          'Erster Turm': 'first',
+          'Ersten zwei Türme (empfohlen)': 'two',
+          'Alle drei Türme': 'all',
+        },
+        fr: {
+          'Aucune': 'none',
+          'Première tour': 'first',
+          'Seconde tour (Recommandé)': 'two',
+          'Les trois tours': 'all',
+        },
+        ja: {
+          'なし (コールなし)': 'none',
+          '最初の塔': 'first',
+          '最初の2つ (推奨)': 'two',
+          '全ての塔': 'all',
+        },
+        cn: {
+          '关闭功能': 'none',
+          '第一个塔': 'first',
+          '前两个塔 (推荐)': 'two',
+          '全部塔': 'all',
+        },
+        ko: {
+          '없음 (알림 없음)': 'none',
+          '1번째 기둥': 'first',
+          '1, 2번째 기둥 (권장)': 'two',
+          '세 기둥 전부': 'all',
+        },
+      },
+      default: 'none',
+    },
+  ],
   timelineFile: 'r3s.txt',
   initData: () => ({
     phaseTracker: 0,
@@ -73,6 +144,7 @@ Options.Triggers.push({
         text: {
           en: 'Out + Spread',
           de: 'Raus + Verteilen',
+          fr: 'Extérieur + Dispersion',
           ja: '外側 + 散開',
           cn: '钢铁 + 八方分散',
           ko: '밖으로 + 산개',
@@ -88,6 +160,7 @@ Options.Triggers.push({
         text: {
           en: 'In + Spread',
           de: 'Rein + Verteilen',
+          fr: 'Intérieur + Dispersion',
           ja: '内側 + 散開',
           cn: '月环 + 八方分散',
           ko: '안으로 + 산개',
@@ -103,6 +176,7 @@ Options.Triggers.push({
         text: {
           en: 'Away + Spread',
           de: 'Weg + Verteilen',
+          fr: 'Loin + Dispersion',
           ja: '離れて + 散開',
           cn: '远离 + 分散',
           ko: '멀리 + 산개',
@@ -118,10 +192,35 @@ Options.Triggers.push({
         text: {
           en: 'Knockback + Spread',
           de: 'Rückstoß + Verteilen',
+          fr: 'Poussée + Dispersion',
           ja: 'ノックバック + 散開',
           cn: '击退 + 分散',
           ko: '넉백 + 산개',
         },
+      },
+    },
+    {
+      id: 'R3S Barbarous Barrage Uptime Knockback',
+      type: 'StartsUsing',
+      netRegex: { id: '93FB', source: 'Brute Bomber', capture: false },
+      delaySeconds: (data) => {
+        switch (data.triggerSetConfig.barbarousBarrageKnockback) {
+          case 'first':
+            return 9;
+          case 'two':
+            return 12;
+          case 'all':
+            return 15;
+          case 'none':
+            return 0;
+        }
+      },
+      infoText: (data, _matches, output) => {
+        if (data.triggerSetConfig.barbarousBarrageKnockback !== 'none')
+          return output.knockback();
+      },
+      outputStrings: {
+        knockback: Outputs.knockback,
       },
     },
     {
@@ -142,6 +241,7 @@ Options.Triggers.push({
         text: {
           en: 'Away + Partners',
           de: 'Weg + Partner',
+          fr: 'Loin + Partenaires',
           ja: '離れて + ペア',
           cn: '远离 + 双人分摊',
           ko: '멀리 + 쉐어',
@@ -157,6 +257,7 @@ Options.Triggers.push({
         text: {
           en: 'Knockback + Partners',
           de: 'Rückstoß + Partner',
+          fr: 'Poussée + Partenaires',
           ja: 'ノックバック + ペア',
           cn: '击退 + 双人分摊',
           ko: '넉백 + 쉐어',
@@ -172,6 +273,7 @@ Options.Triggers.push({
         text: {
           en: 'Out + Partners',
           de: 'Raus + Partner',
+          fr: 'Extérieur + Partenaires',
           ja: '外側 + ペア',
           cn: '钢铁 + 双人分摊',
           ko: '밖으로 + 쉐어',
@@ -187,6 +289,7 @@ Options.Triggers.push({
         text: {
           en: 'In + Partners',
           de: 'Rein + Partner',
+          fr: 'Intérieur + Partenaires',
           ja: '内側 + ペア',
           cn: '月环 + 双人分摊',
           ko: '안으로 + 쉐어',
@@ -203,6 +306,7 @@ Options.Triggers.push({
         text: {
           en: 'Short Fuse',
           de: 'Kurze Lunte',
+          fr: 'Mèche courte',
           ja: '短い導火線',
           cn: '短引线点名',
           ko: '짧은 도화선',
@@ -219,6 +323,7 @@ Options.Triggers.push({
         text: {
           en: 'Long Fuse',
           de: 'Lange Lunte',
+          fr: 'Mèche longue',
           ja: '長い導火線',
           cn: '长引线点名',
           ko: '긴 도화선',
@@ -239,6 +344,7 @@ Options.Triggers.push({
         short: {
           en: 'Short Fuse',
           de: 'Kurze Lunte',
+          fr: 'Mèche courte',
           ja: '短い導火線',
           cn: '短引线点名',
           ko: '짧은 도화선',
@@ -246,6 +352,7 @@ Options.Triggers.push({
         long: {
           en: 'Long Fuse',
           de: 'Lange Lunte',
+          fr: 'Mèche longue',
           ja: '長い導火線',
           cn: '长引线点名',
           ko: '긴 도화선',
@@ -261,10 +368,22 @@ Options.Triggers.push({
         text: {
           en: 'Out => In => Knockback => Spread',
           de: 'Raus => Rein => Rückstoß => Verteilen',
+          fr: 'Extérieur => Intérieur => Poussée => Dispersion',
           ja: '外側 => 内側 => ノックバック => 散開',
           cn: '钢铁 => 月环 => 击退 => 分散',
           ko: '밖으로 => 안으로 => 넉백 => 산개',
         },
+      },
+    },
+    {
+      id: 'R3S Octoboom Bombarian Special Reminder',
+      type: 'StartsUsing',
+      netRegex: { id: '9752', source: 'Brute Bomber', capture: false },
+      delaySeconds: 20,
+      durationSeconds: 7,
+      alertText: (_data, _matches, output) => output.spread(),
+      outputStrings: {
+        spread: Outputs.spread,
       },
     },
     {
@@ -276,10 +395,22 @@ Options.Triggers.push({
         text: {
           en: 'Out => In => Knockback => Partners',
           de: 'Raus => Rein => Rückstoß => Partner',
+          fr: 'Extérieur => Intérieur => Poussée => Partenaires',
           ja: '外側 => 内側 => ノックバック => ペア',
           cn: '钢铁 => 月环 => 击退 => 双人分摊',
           ko: '밖으로 => 안으로 => 넉백 => 쉐어',
         },
+      },
+    },
+    {
+      id: 'R3S Quadroboom Bombarian Special Reminder',
+      type: 'StartsUsing',
+      netRegex: { id: '940A', source: 'Brute Bomber', capture: false },
+      delaySeconds: 20,
+      durationSeconds: 7,
+      alertText: (_data, _matches, output) => output.stack(),
+      outputStrings: {
+        stack: Outputs.stackPartner,
       },
     },
     {
@@ -308,6 +439,11 @@ Options.Triggers.push({
         ...Directions.outputStringsCardinalDir,
         tetheredTo: {
           en: 'Tethered to ${dir} clone',
+          de: 'Vrebindung zum ${dir} Klon',
+          fr: 'Lié au clone ${dir}',
+          ja: '${dir} の分身に繋がれた',
+          cn: '连线分身: ${dir}',
+          ko: '${dir}쪽 분신과 선 연결',
         },
       },
     },
@@ -477,9 +613,19 @@ Options.Triggers.push({
         ...Directions.outputStrings8Dir,
         comboGo: {
           en: 'Knockback ${firstDir1}/${firstDir2} => Go ${secondDir}',
+          de: 'Rückstoß ${firstDir1}/${firstDir2} => Geh nach ${secondDir}',
+          fr: 'Poussée ${firstDir1}/${firstDir2} => Allez ${secondDir}',
+          ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} へ移動',
+          cn: '击退 ${firstDir1}/${firstDir2} => 穿 ${secondDir}',
+          ko: '${firstDir1}/${firstDir2} 넉백 => ${secondDir} 으로 이동',
         },
         comboStay: {
           en: 'Knockback ${firstDir1}/${firstDir2}, Stay ${secondDir}',
+          de: 'Rückstoß ${firstDir1}/${firstDir2} => Bleibe im ${secondDir}',
+          fr: 'Poussée ${firstDir1}/${firstDir2} => Restez ${secondDir}',
+          ja: 'ノックバック ${firstDir1}/${firstDir2} => ${secondDir} で待機',
+          cn: '击退 ${firstDir1}/${firstDir2}, 停 ${secondDir}',
+          ko: '${firstDir1}/${firstDir2} 넉백 => ${secondDir} 그대로 있기',
         },
       },
     },
@@ -527,13 +673,15 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Brute Bomber': 'Brute Bomber',
-        'Brute Distortion': 'double de Brute Bomber',
-        'Lit Fuse': 'bombo à mèche',
+        'Brute Distortion': 'Double de Brute Bomber',
+        'Lit Fuse': 'Bombo à mèche',
       },
       'replaceText': {
+        '\\(cast\\)': '(Incante)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(enrage\\)': '(Enrage)',
         'Barbarous Barrage': 'Bombardement brutal',
         'Blazing Lariat': 'Lariat embrasé',
         'Bombarian Flame': 'Feu brutal',
@@ -599,6 +747,46 @@ Options.Triggers.push({
         'Self-Destruct': '自爆',
         'Special Bombarian Special': 'アルティメット・ボンバリアンスペシャル',
         'Tag Team': 'タッグマッチ',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Brute Bomber': '野蛮爆弹',
+        'Brute Distortion': '野蛮爆弹的幻影',
+        'Lit Fuse': '引线爆弹怪',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(咏唱)',
+        '\\(damage\\)': '(伤害)',
+        '\\(enrage\\)': '(狂暴)',
+        'Barbarous Barrage': '野蛮爆炸',
+        'Blazing Lariat': '怒焰碎颈臂',
+        'Bombarian Flame': '野蛮火焰',
+        '(?<! )Bombarian Special': '超豪华野蛮大乱击',
+        'Bombariboom': '野蛮爆震',
+        'Brutal Impact': '野蛮碎击',
+        'Chain Deathmatch': '锁链生死战',
+        'Diveboom': '强震冲',
+        'Doping Draught': '打药',
+        'Explosion': '爆炸',
+        'Explosive Rain': '爆弹雨',
+        'Final Fusedown': '零式引线爆弹',
+        'Fuse or Foe': '设置引线',
+        'Fusefield': '导火线区域',
+        'Fuses of Fury': '引线爆弹',
+        'Infernal Spin': '超华丽野蛮旋火',
+        'Knuckle Sandwich': '拳面猛击',
+        'Lariat Combo': '碎颈臂连击',
+        'Murderous Mist': '致命毒雾',
+        'Octoboom Bombarian Special': '八分超豪华野蛮大乱击',
+        'Octoboom Dive': '八分强震冲',
+        'Octuple Lariat': '八分双重碎颈臂',
+        'Quadroboom Dive': '四分强震冲',
+        'Quadruple Lariat': '四分双重碎颈臂',
+        'Self-Destruct': '自爆',
+        'Special Bombarian Special': '究极超豪华野蛮大乱击',
+        'Tag Team': '组队战',
       },
     },
   ],

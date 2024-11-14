@@ -79,6 +79,7 @@ Options.Triggers.push({
         knockback: {
           en: 'Knockback (${pos1}/${pos2} Safe)',
           de: 'Rückstoß (${pos1}/${pos2} sicher)',
+          fr: 'Poussée (${pos1}/${pos2} sûr)',
           ja: 'ノックバック (${pos1}/${pos2} が安地)',
           cn: '击退 (${pos1}/${pos2} 安全)',
           ko: '넉백 (${pos1}/${pos2} 안전)',
@@ -124,13 +125,14 @@ Options.Triggers.push({
       },
     },
     {
-      id: 'R1S Mouser',
+      id: 'R1S Mouser Collect',
       type: 'StartsUsing',
-      netRegex: { id: '996C', capture: true },
-      condition: (data, matches) => {
+      netRegex: { id: '996C' },
+      delaySeconds: 0.2,
+      run: (data, matches) => {
         const actorSetPosLine = data.actorSetPosTracker[matches.sourceId];
         if (actorSetPosLine === undefined)
-          return false;
+          return;
         const x = parseFloat(actorSetPosLine.x);
         const y = parseFloat(actorSetPosLine.y);
         const loc = Object.values(mapEffectData)
@@ -139,19 +141,26 @@ Options.Triggers.push({
             Math.abs(tile.centerY - y) < 1
           );
         if (loc === undefined)
-          return false;
+          return;
         const tile = loc.location;
         if (tile !== '09' && tile !== '0A')
-          return false;
+          return;
         data.mouserMatchedTile = tile;
-        return true;
       },
+    },
+    {
+      id: 'R1S Mouser',
+      type: 'StartsUsing',
+      netRegex: { id: '996C', capture: false },
+      delaySeconds: 0.2,
       // We don't need a suppressSeconds since only one of the SW/SE tiles will get hit twice
       durationSeconds: 11,
       infoText: (data, _matches, output) => {
+        // Undef check for data.mouserMatchedTile needs to happen here as opposed to a `condition`,
+        // as the delay needs to happen first.
         const dangerTile = data.mouserMatchedTile;
         if (dangerTile === undefined)
-          return false;
+          return;
         // Danger tile is SW, so safe movement is SW => SE (Stay)
         if (dangerTile === '09') {
           return output.swSeStay({
@@ -169,6 +178,7 @@ Options.Triggers.push({
         swSeStay: {
           en: '${dir1} ${sep} ${dir2} (Stay)',
           de: '${dir1} ${sep} ${dir2} (Stehen bleiben)',
+          fr: '${dir1} ${sep} ${dir2} (Restez)',
           ja: '${dir1} ${sep} ${dir2} (そのまま)',
           cn: '${dir1} ${sep} ${dir2} (不动)',
           ko: '${dir1} ${sep} ${dir2} (그대로)',
@@ -176,12 +186,15 @@ Options.Triggers.push({
         separator: {
           en: ' => ',
           de: ' => ',
+          fr: ' => ',
           ja: ' => ',
           cn: ' => ',
+          ko: ' => ',
         },
         combo: {
           en: '${dirs}',
           de: '${dirs}',
+          fr: '${dirs}',
           ja: '${dirs}',
           cn: '${dirs}',
           ko: '${dirs}',
@@ -199,6 +212,7 @@ Options.Triggers.push({
         outSpread: {
           en: 'Out + Spread',
           de: 'Raus + Verteilen',
+          fr: 'Extérieur + Dispersion',
           ja: '外へ + 散開',
           cn: '远离 + 分散',
           ko: '밖으로 + 산개',
@@ -228,6 +242,7 @@ Options.Triggers.push({
         text: {
           en: 'Launch Forward (Aim for uncracked tile)',
           de: 'Schlag Vorwärts (Ziel auf eine ganze Fläche)',
+          fr: 'Saut vers l\'avant (Visez une tuile saine)',
           ja: '前方吹き飛ばし (割れていない床を狙って)',
           cn: '向前击飞 (瞄准完好的地板)',
           ko: '전방으로 날아감 (부서지지 않은 칸으로 유도)',
@@ -244,6 +259,7 @@ Options.Triggers.push({
         text: {
           en: '${target} Launch',
           de: '${target} Start',
+          fr: '${target} Saut',
           ja: '${target} に吹き飛ばし',
           cn: '${target} 击飞',
           ko: '${target} 날아감',
@@ -260,6 +276,7 @@ Options.Triggers.push({
         text: {
           en: 'Stand on uncracked tile',
           de: 'Steh auf einer ganzen Fläche',
+          fr: 'Restez sur une tuile saine',
           ja: '割れてない床に立って',
           cn: '被砸 (站在完好的场地)',
           ko: '부서지지 않은 칸으로 유도',
@@ -276,6 +293,7 @@ Options.Triggers.push({
         text: {
           en: '${target} Stun',
           de: '${target} Betäubung',
+          fr: '${target} Étourdissment',
           ja: '${target} にスタン',
           cn: '${target} 被砸',
           ko: '${target} 기절',
@@ -393,6 +411,7 @@ Options.Triggers.push({
         insideOut: {
           en: 'Inside => Outside',
           de: 'Rein => Raus',
+          fr: 'Intérieur => Extérieur',
           ja: '内側 => 外側',
           cn: '场内 => 场外',
           ko: '안으로 => 밖으로',
@@ -400,6 +419,7 @@ Options.Triggers.push({
         outsideIn: {
           en: 'Outside => Inside',
           de: 'Raus => Rein',
+          fr: 'Extérieur => Intérieur',
           ja: '外側 => 内側',
           cn: '场外 => 场内',
           ko: '밖으로 => 안으로',
@@ -407,6 +427,7 @@ Options.Triggers.push({
         combo: {
           en: '${dir}, ${cleaves}',
           de: '${dir}, ${cleaves}',
+          fr: '${dir}, ${cleaves}',
           ja: '${dir}, ${cleaves}',
           cn: '${dir}, ${cleaves}',
           ko: '${dir}, ${cleaves}',
@@ -433,6 +454,7 @@ Options.Triggers.push({
         proximity: {
           en: 'Proximity baits at target',
           de: 'Nah-Distanz-Köder vom Ziel',
+          fr: 'Baits proches de la cible',
           ja: 'ボスに近づいて誘導',
           cn: '引导站位',
           ko: '대상 근처에서 유도',
@@ -497,13 +519,13 @@ Options.Triggers.push({
           ) {
             data.storedLeaps.quadCross.resolved = true;
             let dir;
-            if (data.storedLeaps.oneTwoPaw.northSouth === 'north') {
-              if (data.storedLeaps.oneTwoPaw.leftRight === 'left')
+            if (data.storedLeaps.quadCross.northSouth === 'north') {
+              if (data.storedLeaps.quadCross.leftRight === 'left')
                 dir = 'dirE';
               else
                 dir = 'dirW';
             } else {
-              if (data.storedLeaps.oneTwoPaw.leftRight === 'left')
+              if (data.storedLeaps.quadCross.leftRight === 'left')
                 dir = 'dirW';
               else
                 dir = 'dirE';
@@ -518,20 +540,23 @@ Options.Triggers.push({
         in: {
           en: 'In + Healer Stacks => Out',
           de: 'Rein + Auf Heiler sammeln => Raus',
+          fr: 'Intérieur + Packs sur les heals => Extérieur',
           ja: '中へ + ヒラ頭割り => 外へ',
           cn: '场内 + 治疗分摊组 => 场外',
-          ko: '안으로 +  힐러 그룹 쉐어 => 밖으로',
+          ko: '안으로 + 힐러 그룹 쉐어 => 밖으로',
         },
         out: {
           en: 'Out + Healer Stacks => In',
           de: 'Raus + Auf Heiler sammeln => Rein',
+          fr: 'Extérieur + Packs sur les heals => Intérieur',
           ja: '外へ + ヒラ頭割り => 中へ',
           cn: '场外 + 治疗分摊组 => 场内',
-          ko: '밖으로 +  힐러 그룹 쉐어 => 안으로',
+          ko: '밖으로 + 힐러 그룹 쉐어 => 안으로',
         },
         healerStacks: {
           en: 'Go ${dir} => ${inOut}',
           de: 'Geh nach ${dir} => ${inOut}',
+          fr: 'Allez ${dir} => ${inOut}',
           ja: '${dir} へ => ${inOut}',
           cn: '去 ${dir} => ${inOut}',
           ko: '${dir}으로 이동 => ${inOut}',
@@ -539,6 +564,7 @@ Options.Triggers.push({
         proximity: {
           en: 'Go ${dir} => Proximity Baits + Spreads',
           de: 'Geh nach ${dir} => Nah-Distanz-Köder + Verteilen',
+          fr: 'Allez ${dir} => Baits proches + Dispersion',
           ja: '${dir} へ => ボスに近づいて誘導 + 散開',
           cn: '去 ${dir} => 引导站位 + 分散',
           ko: '${dir}으로 이동 => 대상 근처에서 유도 + 산개',
@@ -593,13 +619,24 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Black Cat': 'Black Cat',
         'Copy Cat': 'double félin',
         'Soulshade': 'ombre d\'âme',
       },
       'replaceText': {
+        '\\(First\\)': '(Premier)',
+        '\\(Second\\)': '(Deuxième)',
+        '\\(cast\\)': '(Incante)',
+        '\\(damage\\)': '(Dommage)',
+        '\\(enrage\\)': '(Enrage)',
+        '\\(hit\\)': '(Coup)',
+        '\\(hits\\)': '(Coups)',
+        '\\(jump\\)': '(Saut)',
+        '\\(knockback\\)': '(Poussée)',
+        '\\(stacks\\)': '(Package)',
+        '\\(telegraphs\\)': '(Télégraphe)',
+        '\\(tethers\\)': '(Liens)',
         'Biscuit Maker': 'Coup de tatane',
         'Bloody Scratch': 'Griffure sanglante',
         'Copycat': 'Double félin',
@@ -655,6 +692,50 @@ Options.Triggers.push({
         'Soulshade': 'ソウルシェード',
         'Splintering Nails': 'スプレッドネイル',
         'Tempestuous Tear': 'テンペストテアー',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Black Cat': '黑猫',
+        'Copy Cat': '模仿猫',
+        'Soulshade': '灵魂之影',
+      },
+      'replaceText': {
+        '\\(First\\)': '(一)',
+        '\\(Second\\)': '(二)',
+        '\\(cast\\)': '(咏唱)',
+        '\\(damage\\)': '(伤害)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(hit\\)': '(命中)',
+        '\\(hits\\)': '(命中)',
+        '\\(jump\\)': '(跳)',
+        '\\(knockback\\)': '(击退)',
+        '\\(stacks\\)': '(分摊)',
+        '\\(telegraphs\\)': '(预兆)',
+        '\\(tethers\\)': '(连线)',
+        'Biscuit Maker': '踩奶',
+        'Bloody Scratch': '血腥抓挠',
+        'Copycat': '模仿之猫',
+        'Double Swipe': '双重利爪',
+        'Elevate and Eviscerate': '击飞开膛',
+        'Grimalkin Gale': '猫怪突风',
+        'Impact': '冲击',
+        'Leaping One-two Paw': '猫跳二连尖甲',
+        'Leaping Quadruple Crossing': '猫跳四连尖甲',
+        'Mouser': '捕鼠',
+        'Nailchipper': '剪指甲',
+        'Nine Lives': '猫生九命',
+        '(?<! )One-two Paw': '二连尖甲',
+        'Overshadow': '超暗影',
+        'Predaceous Pounce': '迅猫急袭',
+        '(?<! )Quadruple Crossing': '四连尖甲',
+        'Quadruple Swipe': '四重利爪',
+        'Raining Cats': '倾盆大猫',
+        'Shockwave': '冲击波',
+        'Soulshade': '灵魂之影',
+        'Splintering Nails': '碎裂尖甲',
+        'Tempestuous Tear': '暴风裂',
       },
     },
   ],

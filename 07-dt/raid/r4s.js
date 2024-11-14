@@ -60,59 +60,93 @@ const witchHuntAlertOutputStrings = {
   in: {
     en: 'In',
     de: 'Rein',
+    fr: 'Intérieur',
     ja: '中へ',
     cn: '月环',
+    ko: '안',
   },
   out: {
     en: 'Out',
     de: 'Raus',
+    fr: 'Extérieur',
     ja: '外へ',
     cn: '钢铁',
+    ko: '밖',
   },
   near: {
     en: 'Baits Close (Party Far)',
     de: 'Nah ködern (Gruppe fern)',
+    fr: 'Déposez près (Groupe au loin)',
     ja: '近づいて誘導 (他は離れる)',
     cn: '引导近 (小队远)',
+    ko: '가까이 유도 (본대 멀리)',
   },
   far: {
     en: 'Baits Far (Party Close)',
     de: 'Fern ködern (Gruppe nah)',
+    fr: 'Déposez au loin (Groupe près)',
     ja: '離れて誘導 (他は近づく)',
     cn: '引导远 (小队近)',
+    ko: '멀리 유도 (본대 가까이)',
+  },
+  tanksNear: {
+    en: 'Tanks Close (Party Far)',
+    cn: '坦克近 (小队远)',
+  },
+  healersFar: {
+    en: 'Healers Far (Party Close)',
+    cn: '治疗远 (小队近)',
+  },
+  meleeNear: {
+    en: 'Melee Close (Party Far)',
+    cn: '近战近 (小队远)',
+  },
+  rangedFar: {
+    en: 'Ranged Far (Party Close)',
+    cn: '远程远 (小队近)',
   },
   combo: {
     en: '${inOut} => ${bait}',
     de: '${inOut} => ${bait}',
+    fr: '${inOut} => ${bait}',
     ja: '${inOut} => ${bait}',
     cn: '${inOut} => ${bait}',
+    ko: '${inOut} => ${bait}',
   },
   unknown: Outputs.unknown,
 };
 const tailThrustOutputStrings = {
   iceLeft: {
-    en: 'Double Knockback (<== Start on Left)',
-    de: 'Doppel-Rückstoß (<== Starte Links)',
-    ja: '2連続ノックバック (<== 左から開始)',
-    cn: '两次击退 (<== 左边开始)',
+    en: '<== (Start on Left) Double Knockback',
+    de: '<== (Starte Links) Doppel-Rückstoß',
+    fr: '<== (Démarrez à gauche) Double poussée',
+    ja: '<== (左から開始) 2連続ノックバック',
+    cn: '<== (左边开始) 两次击退',
+    ko: '<== (왼쪽에서 시작) 넉백 2번',
   },
   iceRight: {
-    en: 'Double Knockback (Start on Right ==>)',
-    de: 'Doppel-Rückstoß (Starte Rechts ==>)',
-    ja: '2連続ノックバック (右から開始 ==>)',
-    cn: '两次击退 (右边开始 ==>)',
+    en: '(Start on Right) Double Knockback ==>',
+    de: '(Starte Rechts) Doppel-Rückstoß ==>',
+    fr: '(Démarrez à droite) Double poussée ==>',
+    ja: '(右から開始) 2連続ノックバック ==>',
+    cn: '(右边开始) 两次击退 ==>',
+    ko: '(오른쪽에서 시작) 넉백 2번 ==>',
   },
   fireLeft: {
     en: 'Fire - Start Front + Right ==>',
     de: 'Feuer - Starte Vorne + Rechts ==>',
+    fr: 'Feu - Démarrez Devant + Droite ==>',
     ja: '火 - 最前列 + 右側へ ==>',
     cn: '火 - 右右右 ==>',
+    ko: '불 - 오른쪽 앞에서 시작 ==>',
   },
   fireRight: {
     en: '<== Fire - Start Front + Left',
     de: '<== Feuer - Starte Vorne + Links',
+    fr: '<== Feu - Démarrez Devant + Gauche',
     ja: '<== 火 - 最前列 + 左側へ',
     cn: '<== 火 - 左左左',
+    ko: '<== 불 - 왼쪽 앞에서 시작',
   },
   unknown: Outputs.unknown,
 };
@@ -120,25 +154,223 @@ const swordQuiverOutputStrings = {
   frontAndSides: {
     en: 'Go Front / Sides',
     de: 'Geh nach Vorne / Seiten',
+    fr: 'Allez Devant / Côtés',
     ja: '前方 / 横側 へ',
     cn: '去前 / 侧边',
+    ko: '앞 / 양옆으로',
   },
   frontAndBack: {
     en: 'Go Front / Back',
     de: 'Geh nach Vorne / Hinten',
+    fr: 'Allez Devant / Derrière',
     ja: '前方 / 後方 へ',
     cn: '去前 / 后边',
+    ko: '앞 / 뒤로',
   },
   sidesAndBack: {
     en: 'Go Sides / Back',
     de: 'Geh Seitlich / Hinten',
+    fr: 'Allez Côtés / Derrière',
     ja: '横 / 後方 へ',
     cn: '去侧 / 后边',
+    ko: '양옆 / 뒤로',
+  },
+};
+const conductorCurrentStringsNoStrat = {
+  remoteCurrent: {
+    en: 'Far Cone on You',
+    de: 'Fern-Kegel auf DIR',
+    fr: 'Cône éloigné sur Vous',
+    ja: '自分から遠い人に扇範囲',
+    cn: '远雷点名',
+    ko: '원거리 화살표 대상자',
+  },
+  proximateCurrent: {
+    en: 'Near Cone on You',
+    de: 'Nah-Kegel auf DIR',
+    fr: 'Cône proche sur Vous',
+    ja: '自分から近い人に扇範囲',
+    cn: '近雷点名',
+    ko: '근거리 화살표 대상자',
+  },
+  spinningConductorSupport: {
+    en: 'Small AoE on You',
+    de: 'Kleine AoE auf DIR',
+    fr: 'Petite AoE sur Vous',
+    ja: '自分に小さい円範囲',
+    cn: '小钢铁点名',
+    ko: '작은 원형징 대상자',
+  },
+  spinningConductorDPS: {
+    en: 'Small AoE on You',
+    de: 'Kleine AoE auf DIR',
+    fr: 'Petite AoE sur Vous',
+    ja: '自分に小さい円範囲',
+    cn: '小钢铁点名',
+    ko: '작은 원형징 대상자',
+  },
+  roundhouseConductorSupport: {
+    en: 'Donut AoE on You',
+    de: 'Donut AoE auf DIR',
+    fr: 'Donut sur Vous',
+    ja: '自分にドーナツ範囲',
+    cn: '月环点名',
+    ko: '도넛징 대상자',
+  },
+  roundhouseConductorDPS: {
+    en: 'Donut AoE on You',
+    de: 'Donut AoE auf DIR',
+    fr: 'Donut sur Vous',
+    ja: '自分にドーナツ範囲',
+    cn: '月环点名',
+    ko: '도넛징 대상자',
+  },
+  colliderConductor: {
+    en: 'Get Hit by Cone',
+    de: 'Werde vom Kegel getroffen',
+    fr: 'Encaissez un cône',
+    ja: '扇範囲に当たって',
+    cn: '吃雷',
+    ko: '화살표 장판 맞기',
+  },
+};
+const conductorCurrentStringsDNStrat = {
+  remoteCurrent: {
+    en: 'Front of Middle (Far Cone)',
+    cn: '中前 (远扇形)',
+  },
+  proximateCurrent: {
+    en: 'Front of Middle (Near Cone)',
+    cn: '中前 (近扇形)',
+  },
+  spinningConductorSupport: {
+    en: 'Front Left (Small AoE)',
+    cn: '左前 (小圈)',
+  },
+  spinningConductorDPS: {
+    en: 'Front Right (Small AoE)',
+    cn: '右前 (小圈)',
+  },
+  roundhouseConductorSupport: {
+    en: 'Front Left (Donut AoE)',
+    cn: '左前 (月环)',
+  },
+  roundhouseConductorDPS: {
+    en: 'Front Right (Donut AoE)',
+    cn: '右前 (月环)',
+  },
+  colliderConductor: {
+    en: 'Middle, Behind Current (Get Hit by Cone)',
+    cn: '中间, 扇形后 (吃扇形)',
   },
 };
 Options.Triggers.push({
   id: 'AacLightHeavyweightM4Savage',
   zoneId: ZoneId.AacLightHeavyweightM4Savage,
+  config: [
+    {
+      id: 'ionCluster',
+      name: {
+        en: 'Ion Cluster Debuff Strategy',
+        cn: '离子簇 Debuff 策略',
+      },
+      comment: {
+        en: `Strategy for resolving debuffs during Ion Cluster.
+             None: Call the debuff only, no strategy.
+             DN: use rivet positions based on the shabin pastebin.`,
+        cn: `在 离子簇 机制中处理 debuff 的策略。
+             无: 只播报 Debuff, 不使用策略。
+             DN: 使用基于 shabin pastebin 的固定站位。`,
+      },
+      type: 'select',
+      options: {
+        en: {
+          'None': 'none',
+          'DN': 'DN',
+        },
+        cn: {
+          '无': 'none',
+          'DN': 'DN',
+        },
+      },
+      default: 'none',
+    },
+    {
+      id: 'witchHunt',
+      name: {
+        en: 'Witch Hunt Bait Strategy',
+        cn: '魔女狩猎诱导策略',
+      },
+      comment: {
+        en: `Strategy for baiting Witch Hunt AoEs.<br>
+             None: Call both party and bait positions with no specific strategy.<br>
+             DN: DN uptime strategy, with flexible priority where Tanks take the first near bait,
+             Healers take the first far bait, Melee DPS take the second near bait, and finally
+             Ranged DPS take the second far bait.`,
+        cn: `诱导魔女狩猎 AOE 的策略。<br>
+             无: 同时播报小队和诱导位置，无特定策略。<br>
+             DN: DN uptime 策略, 优先级灵活, 坦克负责第一个近诱导,
+             治疗负责第一个远诱导, 近战 DPS 负责第二个近诱导,
+             最后远程 DPS 负责第二个远诱导。`,
+      },
+      type: 'select',
+      options: {
+        en: {
+          'None': 'none',
+          'DN': 'DN',
+        },
+        cn: {
+          '无': 'none',
+          'DN': 'DN',
+        },
+      },
+      default: 'none',
+    },
+    {
+      id: 'sunrise',
+      name: {
+        en: 'Sunrise Sabbath Strategy',
+        cn: '黑色安息日的日出策略',
+      },
+      comment: {
+        en: `Strategy for resolving Sunrise Sabbath.<br>
+             None: Call debuffs, both tower spawns, and matching towers.<br>
+             Snakes Prio: Popular priority system used in NA PF. Support players
+             start looking for tower or cannon from the northwest going counter clockwise.
+             DPS players look for tower or cannon from the north going clockwise.`,
+        cn: `处理黑色安息日的日出的策略。<br>
+             无: 播报 Debuff, 双塔生成, 和匹配的塔。<br>
+             Snakes Prio: 流行于北美招募版的优先级系统。
+             T 奶玩家从西北方开始逆时针寻找塔或炮。
+             DPS 玩家从正北方开始顺时针寻找塔或炮。`,
+      },
+      type: 'select',
+      options: {
+        en: {
+          'None': 'none',
+          'Snakes Prio': 'snakePrio',
+        },
+        cn: {
+          '无': 'none',
+          'Snakes Prio': 'snakePrio',
+        },
+      },
+      default: 'none',
+    },
+    {
+      id: 'sunriseUptime',
+      name: {
+        en: 'Sunrise Sabbath Uptime Cannon Baits',
+        cn: '黑色安息日的日出 使用 uptime 炮诱导打法',
+      },
+      comment: {
+        en: 'Call cannon baits assuming the AutoCAD waymark uptime cannon bait spots.',
+        cn: '基于 AutoCAD 标点的 uptime 炮诱导打法播报炮诱导。',
+      },
+      type: 'checkbox',
+      default: false,
+    },
+  ],
   timelineFile: 'r4s.txt',
   initData: () => {
     return {
@@ -161,7 +393,8 @@ Options.Triggers.push({
       replicas: {},
       mustardBombTargets: [],
       kindlingCauldronTargets: [],
-      twilightSafe: Directions.outputIntercardDir,
+      twilightSafeFirst: Directions.outputIntercardDir,
+      twilightSafeSecond: Directions.outputIntercardDir,
       replicaCleaveCount: 0,
       sunriseCannons: [],
       seenFirstSunrise: false,
@@ -223,14 +456,16 @@ Options.Triggers.push({
     {
       id: 'R4S Bewitching Flight',
       type: 'StartsUsing',
-      netRegex: { id: '9671', source: 'Wicked Thunder', capture: false },
+      netRegex: { id: ['9671', '8DEF'], source: 'Wicked Thunder', capture: false },
       infoText: (_data, _matches, output) => output.avoid(),
       outputStrings: {
         avoid: {
           en: 'Avoid Front + Side Cleaves',
           de: 'Vermeide Frontal + Seiten-Angriff',
+          fr: 'Évitez les cleaves Avant + Côtés',
           ja: '縦と横の範囲を避けて',
           cn: '躲避前方激光 + 场边直线AoE',
+          ko: '전방 + 양옆 레이저 피하기',
         },
       },
     },
@@ -260,26 +495,34 @@ Options.Triggers.push({
         in: {
           en: 'In',
           de: 'Rein',
+          fr: 'Intérieur',
           ja: '中へ',
           cn: '内场',
+          ko: '안',
         },
         out: {
           en: 'Out',
           de: 'Raus',
+          fr: 'Extérieur',
           ja: '外へ',
           cn: '外场',
+          ko: '밖',
         },
         spreadAvoid: {
           en: 'Spread (Avoid Side Cleaves)',
           de: 'Verteilen (Vermeide Seiten-Angriff)',
+          fr: 'Dispersion (Évitez les cleaves de côtés)',
           ja: '散開 (横の範囲を避けて)',
           cn: '分散 (注意场边直线AoE)',
+          ko: '산개 (양옆 레이저 피하기)',
         },
         combo: {
           en: '${inOut} + ${spread}',
           de: '${inOut} + ${spread}',
+          fr: '${inOut} + ${spread}',
           ja: '${inOut} + ${spread}',
           cn: '${inOut} + ${spread}',
+          ko: '${inOut} + ${spread}',
         },
       },
     },
@@ -317,32 +560,42 @@ Options.Triggers.push({
         in: {
           en: 'In',
           de: 'Rein',
+          fr: 'Intérieur',
           ja: '中へ',
           cn: '内场',
+          ko: '안',
         },
         out: {
           en: 'Out',
           de: 'Raus',
+          fr: 'Extérieur',
           ja: '外へ',
           cn: '外场',
+          ko: '밖',
         },
         near: {
           en: 'Spread (Be Closer)',
           de: 'Verteilen (Sei näher dran)',
+          fr: 'Dispersion (Près)',
           ja: '散開(近づく)',
           cn: '靠近分散',
+          ko: '산개 (가까이)',
         },
         far: {
           en: 'Spread (Be Further)',
           de: 'Verteilen (Sei weiter weg)',
+          fr: 'Dispersion (Loin)',
           ja: '散開(離れる)',
           cn: '远离分散',
+          ko: '산개 (멀리)',
         },
         combo: {
           en: '${inOut} + ${spread}',
           de: '${inOut} + ${spread}',
+          fr: '${inOut} + ${spread}',
           ja: '${inOut} + ${spread}',
           cn: '${inOut} + ${spread}',
+          ko: '${inOut} + ${spread}',
         },
       },
     },
@@ -375,11 +628,20 @@ Options.Triggers.push({
           aoeOrder = aoeOrder.reverse();
         data.witchHuntAoESafe = aoeOrder[0];
         // assumes Near first; if Far first, just reverse
-        let baitOrder = ['near', 'far', 'near', 'far'];
-        if (data.witchHuntBait === undefined)
+        let baitOrder;
+        if (data.witchHuntBait === 'near') {
+          if (data.triggerSetConfig.witchHunt === 'DN')
+            baitOrder = ['tank', 'healer', 'melee', 'ranged'];
+          else
+            baitOrder = ['near', 'far', 'near', 'far'];
+        } else if (data.witchHuntBait === 'far') {
+          if (data.triggerSetConfig.witchHunt === 'DN')
+            baitOrder = ['healer', 'tank', 'ranged', 'melee'];
+          else
+            baitOrder = ['far', 'near', 'far', 'near'];
+        } else {
           baitOrder = [];
-        else if (data.witchHuntBait === 'far')
-          baitOrder = baitOrder.reverse();
+        }
         const baits = [];
         for (let i = 0; i < aoeOrder.length; ++i) {
           const inOut = aoeOrder[i];
@@ -392,44 +654,74 @@ Options.Triggers.push({
         in: {
           en: 'In',
           de: 'Rein',
+          fr: 'Intérieur',
           ja: '中へ',
           cn: '月环',
+          ko: '안',
         },
         out: {
           en: 'Out',
           de: 'Raus',
+          fr: 'Extérieur',
           ja: '外へ',
           cn: '钢铁',
+          ko: '밖',
         },
         near: {
           en: 'Close',
           de: 'Nah',
+          fr: 'Près',
           ja: '近づく',
           cn: '近',
+          ko: '가까이',
         },
         far: {
           en: 'Far',
           de: 'Fern',
+          fr: 'Loin',
           ja: '離れる',
           cn: '远',
+          ko: '멀리',
+        },
+        tank: {
+          en: 'Tanks',
+          cn: '坦克',
+        },
+        healer: {
+          en: 'Healers',
+          cn: '治疗',
+        },
+        melee: {
+          en: 'Melee',
+          cn: '近战',
+        },
+        ranged: {
+          en: 'Ranged',
+          cn: '远程',
         },
         separator: {
           en: ' => ',
           de: ' => ',
+          fr: ' => ',
           ja: ' => ',
           cn: ' => ',
+          ko: ' => ',
         },
         baitStep: {
           en: '${inOut} (${bait})',
           de: '${inOut} (${bait})',
+          fr: '${inOut} (${bait})',
           ja: '${inOut} (${bait})',
           cn: '${inOut} (${bait})',
+          ko: '${inOut} (${bait})',
         },
         baitCombo: {
           en: 'Baits: ${allBaits}',
           de: 'Ködern: ${allBaits}',
+          fr: 'Dépose : ${allBaits}',
           ja: '誘導: ${allBaits}',
           cn: '引导: ${allBaits}',
+          ko: '유도: ${allBaits}',
         },
         unknown: Outputs.unknown,
       },
@@ -450,7 +742,18 @@ Options.Triggers.push({
           data.witchHuntAoESafe = data.witchHuntAoESafe === 'in' ? 'out' : 'in';
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
-        return output.combo({ inOut: output[inOut](), bait: output[bait]() });
+        const spot = () => {
+          if (data.triggerSetConfig.witchHunt === 'none')
+            return bait;
+          // DN Strat: Tanks take the first near bait
+          if (bait === 'near')
+            return 'tanksNear';
+          // DN Strat: Healers take the first far bait
+          if (bait === 'far')
+            return 'healersFar';
+          return bait;
+        };
+        return output.combo({ inOut: output[inOut](), bait: output[spot()]() });
       },
       outputStrings: witchHuntAlertOutputStrings,
     },
@@ -468,7 +771,18 @@ Options.Triggers.push({
           data.witchHuntAoESafe = data.witchHuntAoESafe === 'in' ? 'out' : 'in';
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
-        return output.combo({ inOut: output[inOut](), bait: output[bait]() });
+        const spot = () => {
+          if (data.triggerSetConfig.witchHunt === 'none')
+            return bait;
+          // DN Strat: Tanks take the first near bait
+          if (bait === 'near')
+            return 'tanksNear';
+          // DN Strat: Healers take the first far bait
+          if (bait === 'far')
+            return 'healersFar';
+          return bait;
+        };
+        return output.combo({ inOut: output[inOut](), bait: output[spot()]() });
       },
       outputStrings: witchHuntAlertOutputStrings,
     },
@@ -486,7 +800,18 @@ Options.Triggers.push({
           data.witchHuntAoESafe = data.witchHuntAoESafe === 'in' ? 'out' : 'in';
         if (data.witchHuntBait !== undefined)
           data.witchHuntBait = data.witchHuntBait === 'near' ? 'far' : 'near';
-        return output.combo({ inOut: output[inOut](), bait: output[bait]() });
+        const spot = () => {
+          if (data.triggerSetConfig.witchHunt === 'none')
+            return bait;
+          // DN Strat: Melee take the second near bait
+          if (bait === 'near')
+            return 'meleeNear';
+          // DN Strat: Ranged take the second far bait
+          if (bait === 'far')
+            return 'rangedFar';
+          return bait;
+        };
+        return output.combo({ inOut: output[inOut](), bait: output[spot()]() });
       },
       outputStrings: witchHuntAlertOutputStrings,
     },
@@ -499,7 +824,18 @@ Options.Triggers.push({
       alertText: (data, _matches, output) => {
         const inOut = data.witchHuntAoESafe ?? output.unknown();
         const bait = data.witchHuntBait ?? output.unknown();
-        return output.combo({ inOut: output[inOut](), bait: output[bait]() });
+        const spot = () => {
+          if (data.triggerSetConfig.witchHunt === 'none')
+            return bait;
+          // DN Strat: Melee take the second near bait
+          if (bait === 'near')
+            return 'meleeNear';
+          // DN Strat: Ranged take the second far bait
+          if (bait === 'far')
+            return 'rangedFar';
+          return bait;
+        };
+        return output.combo({ inOut: output[inOut](), bait: output[spot()]() });
       },
       outputStrings: witchHuntAlertOutputStrings,
     },
@@ -597,8 +933,10 @@ Options.Triggers.push({
         combo: {
           en: '${dir} => ${mech}',
           de: '${dir} => ${mech}',
+          fr: '${dir} => ${mech}',
           ja: '${dir} => ${mech}',
           cn: '${dir} => ${mech}',
+          ko: '${dir} => ${mech}',
         },
       },
     },
@@ -640,14 +978,18 @@ Options.Triggers.push({
         short: {
           en: 'Short Debuff (w/ ${same})',
           de: 'Kurzer Debuff (mit ${same})',
+          fr: 'Debuff court (avec ${same})',
           ja: '短いデバフ (同じく/ ${same})',
           cn: '短 Debuff (和 ${same})',
+          ko: '짧은 디버프 (+ ${same})',
         },
         long: {
           en: 'Long Debuff (w/ ${same})',
           de: 'Langer Debuff (mit ${same})',
+          fr: 'Debuff long (avec ${same})',
           ja: '長いデバフ (同じく/ ${same})',
           cn: '长 Debuff (和 ${same})',
+          ko: '긴 디버프 (+ ${same})',
         },
       },
     },
@@ -669,7 +1011,11 @@ Options.Triggers.push({
       outputStrings: {
         witchgleamTimes: {
           en: '${times} stacks (later)',
+          de: '${times} Treffer (später)',
+          fr: '${times} packages (après)',
+          ja: '${times} 回のほう (後)',
           cn: '(稍后 ${times} 层)',
+          ko: '(${times} 스택)',
         },
       },
     },
@@ -685,9 +1031,11 @@ Options.Triggers.push({
       outputStrings: {
         spread: {
           en: 'Spread (${stacks} stacks)',
-          de: 'Verteilen (${stacks} sammeln)',
+          de: 'Verteilen (${stacks} Ladungen)',
+          fr: 'Dispersion (${stacks} package)',
           ja: '散開 (${stacks} 回のほう)',
           cn: '分散 (${stacks} 层)',
+          ko: '산개 (${stacks} 스택)',
         },
       },
     },
@@ -727,15 +1075,19 @@ Options.Triggers.push({
         unknown: Outputs.unknown,
         stacks: {
           en: '(${stacks} stacks after)',
-          de: '(${stacks} danach sammeln)',
+          de: '(danach ${stacks} Ladungen)',
+          fr: '(${stacks} packages après)',
           ja: '(${stacks} 回のほう)',
           cn: '(${stacks} 层雷)',
+          ko: '(나중에 ${stacks} 스택)',
         },
         combo: {
           en: '${dir} => ${mech} ${remind}',
           de: '${dir} => ${mech} ${remind}',
+          fr: '${dir} => ${mech} ${remind}',
           ja: '${dir} => ${mech} ${remind}',
           cn: '${dir} => ${mech} ${remind}',
+          ko: '${dir} => ${mech} ${remind}',
         },
       },
     },
@@ -744,13 +1096,13 @@ Options.Triggers.push({
       id: 'R4S Left Roll',
       type: 'Ability',
       netRegex: { id: '95D3', source: 'Wicked Thunder', capture: false },
-      response: Responses.goLeft(),
+      response: Responses.goWest(),
     },
     {
       id: 'R4S Right Roll',
       type: 'Ability',
       netRegex: { id: '95D2', source: 'Wicked Thunder', capture: false },
-      response: Responses.goRight(),
+      response: Responses.goEast(),
     },
     {
       id: 'R4S Electron Stream Debuff',
@@ -786,14 +1138,18 @@ Options.Triggers.push({
         tank: {
           en: '${dir} - Be in Front',
           de: '${dir} - Sei Vorne',
+          fr: '${dir} - Devant le groupe',
           ja: '${dir} - ボス近くで受けて',
           cn: '${dir} - 站在最前面',
+          ko: '${dir} - 맨 앞으로',
         },
         nonTank: {
           en: '${dir} - Behind Tank',
           de: '${dir} - Hinter dem Tank',
+          fr: '${dir} - Derrière le tank',
           ja: '${dir} - タンクの後ろへ',
           cn: '${dir} - 站坦克后面',
+          ko: '${dir} - 탱커 뒤로',
         },
       },
     },
@@ -810,27 +1166,35 @@ Options.Triggers.push({
           swap: {
             en: 'Swap Sides',
             de: 'Seiten wechseln',
+            fr: 'Changez de côté',
             ja: '場所を交代',
             cn: '穿',
+            ko: '교체',
           },
           stay: {
             en: 'Stay',
             de: 'Stehen bleiben',
+            fr: 'Restez',
             ja: 'そのまま',
             cn: '停',
+            ko: '그대로',
           },
           unknown: Outputs.unknown,
           tank: {
             en: '${dir} - Be in Front',
             de: '${dir} - Sei Vorne',
+            fr: '${dir} - Devant le groupe',
             ja: '${dir} - ボス近くで受けて',
             cn: '${dir} - 站在最前面',
+            ko: '${dir} - 맨 앞으로',
           },
           nonTank: {
             en: '${dir} - Behind Tank',
             de: '${dir} - Hinter dem Tank',
+            fr: '${dir} - Derrière le tank',
             ja: '${dir} - タンクの後ろへ',
             cn: '${dir} - 站坦克后面',
+            ko: '${dir} - 탱커 뒤로',
           },
         };
         let safeSide = 'unknown';
@@ -859,53 +1223,29 @@ Options.Triggers.push({
       netRegex: { effectId: ['FA2', 'FA3', 'FA4', 'FA5', 'FA6'] },
       condition: Conditions.targetIsYou(),
       durationSeconds: 5,
-      alertText: (_data, matches, output) => {
+      response: (data, matches, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = data.triggerSetConfig.ionCluster === 'DN'
+          ? conductorCurrentStringsDNStrat
+          : conductorCurrentStringsNoStrat;
         switch (matches.effectId) {
           case 'FA2':
-            return output.remoteCurrent();
+            return { alertText: output.remoteCurrent() };
           case 'FA3':
-            return output.proximateCurrent();
+            return { alertText: output.proximateCurrent() };
           case 'FA4':
-            return output.spinningConductor();
+            if (data.role === 'tank' || data.role === 'healer')
+              return { alertText: output.spinningConductorSupport() };
+            return { alertText: output.spinningConductorDPS() };
           case 'FA5':
-            return output.roundhouseConductor();
+            if (data.role === 'tank' || data.role === 'healer')
+              return { alertText: output.roundhouseConductorSupport() };
+            return { alertText: output.roundhouseConductorDPS() };
           case 'FA6':
-            return output.colliderConductor();
+            return { alertText: output.colliderConductor() };
         }
       },
       run: (data) => data.seenConductorDebuffs = true,
-      outputStrings: {
-        remoteCurrent: {
-          en: 'Far Cone on You',
-          de: 'Fern-Kegel auf DIR',
-          ja: '自分から遠い人に扇範囲',
-          cn: '远雷点名',
-        },
-        proximateCurrent: {
-          en: 'Near Cone on You',
-          de: 'Nah-Kegel auf DIR',
-          ja: '自分から近い人に扇範囲',
-          cn: '近雷点名',
-        },
-        spinningConductor: {
-          en: 'Small AoE on You',
-          de: 'Kleine AoE auf DIR',
-          ja: '自分に小さい円範囲',
-          cn: '小钢铁点名',
-        },
-        roundhouseConductor: {
-          en: 'Donut AoE on You',
-          de: 'Donut AoE auf DIR',
-          ja: '自分にドーナツ範囲',
-          cn: '月环点名',
-        },
-        colliderConductor: {
-          en: 'Get Hit by Cone',
-          de: 'Werde vom Kegel getroffen',
-          ja: '扇範囲に当たって',
-          cn: '吃雷',
-        },
-      },
     },
     // Fulminous Field
     {
@@ -917,8 +1257,10 @@ Options.Triggers.push({
         dodge: {
           en: 'Dodge w/Partner x7',
           de: 'mit Partner ausweichen x7',
+          fr: 'Esquivez avec votre partenaire x7',
           ja: '相方と避ける x7',
           cn: '与搭档躲避 7 次扇形',
+          ko: '파트너와 함께 피하기 x7',
         },
       },
     },
@@ -962,14 +1304,18 @@ Options.Triggers.push({
         near: {
           en: 'In Front of Partner',
           de: 'Sei vor deinem Partner',
+          fr: 'Devant votre partenaire',
           ja: '相方の前へ',
           cn: '站在搭档前面 (挡枪)',
+          ko: '파트너 앞으로',
         },
         far: {
           en: 'Behind Partner',
           de: 'Sei hinter deinem Partner',
+          fr: 'Derrière votre partenaire',
           ja: '相方の後ろへ',
           cn: '站在搭档后面',
+          ko: '파트너 뒤로',
         },
       },
     },
@@ -1004,6 +1350,12 @@ Options.Triggers.push({
       response: Responses.aoe(),
     },
     {
+      id: 'R4S Wicked Thunder',
+      type: 'StartsUsing',
+      netRegex: { id: '949B', source: 'Wicked Thunder', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
       id: 'R4S Mustard Bomb Initial',
       type: 'StartsUsing',
       netRegex: { id: '961E', source: 'Wicked Thunder', capture: false },
@@ -1033,10 +1385,16 @@ Options.Triggers.push({
       delaySeconds: 0.2,
       suppressSeconds: 1,
       infoText: (data, _matches, output) => {
-        if (data.mustardBombTargets.includes(data.me))
-          return output.passDebuff();
-        else if (!data.kindlingCauldronTargets.includes(data.me))
+        if (data.mustardBombTargets.includes(data.me)) {
+          const safePlayers = data.party.partyNames.filter((m) =>
+            !data.kindlingCauldronTargets.includes(m) &&
+            !data.mustardBombTargets.includes(m)
+          );
+          const toStr = safePlayers.map((m) => data.party.member(m).nick).join(', ');
+          return output.passDebuff({ to: toStr });
+        } else if (!data.kindlingCauldronTargets.includes(data.me)) {
           return output.getDebuff();
+        }
       },
       run: (data) => {
         data.mustardBombTargets = [];
@@ -1044,16 +1402,20 @@ Options.Triggers.push({
       },
       outputStrings: {
         passDebuff: {
-          en: 'Pass Debuff',
-          de: 'Debuff übergeben',
-          ja: 'デバフを渡して',
-          cn: '传火',
+          en: 'Pass Debuff (${to})',
+          de: 'Debuff übergeben (${to})',
+          fr: 'Donner le debuff (${to})',
+          ja: 'デバフを渡して (${to})',
+          cn: '传火 (${to})',
+          ko: '디버프 전달 (${to})',
         },
         getDebuff: {
           en: 'Get Debuff',
           de: 'Debuff nehmen',
+          fr: 'Prenez le debuff',
           ja: 'デバフを取って',
           cn: '接火',
+          ko: '디버프 받기',
         },
       },
     },
@@ -1090,8 +1452,10 @@ Options.Triggers.push({
         stored: {
           en: 'Stored: ${effect}',
           de: 'Gespeichert: ${effect}',
+          fr: 'Enregistré : ${effect}',
           ja: 'あとで: ${effect}',
           cn: '存储: ${effect}',
+          ko: '저장: ${effect}',
         },
       },
     },
@@ -1116,8 +1480,10 @@ Options.Triggers.push({
           lb3: {
             en: 'LB3!',
             de: 'LB3!',
+            fr: 'Transcendance !',
             ja: 'タンク LB3!',
             cn: '坦克 LB!',
+            ko: '탱 3단 리밋!',
           },
         };
         if (data.role === 'tank')
@@ -1138,48 +1504,69 @@ Options.Triggers.push({
     },
     // Twilight Sabbath
     {
-      id: 'R4S Wicked Fire',
-      type: 'StartsUsing',
-      netRegex: { id: '9630', source: 'Wicked Thunder', capture: false },
-      infoText: (_data, _matches, output) => output.bait(),
-      outputStrings: {
-        bait: Outputs.baitPuddles,
-      },
-    },
-    {
       id: 'R4S Twilight Sabbath Sidewise Spark',
-      type: 'GainsEffect',
-      // count: 319 - add cleaves to its right, 31A - add cleaves to its left
-      netRegex: { effectId: '808', count: ['319', '31A'] },
+      type: 'ActorControlExtra',
+      // category: 0197 - PlayActionTimeline
+      // param1: 11D6 - first,  right cleave
+      // param1: 11D7 - second, right cleave
+      // param1: 11D8 - first,  left cleave
+      // param1: 11D9 - second, left cleave
+      netRegex: { category: '0197', param1: ['11D6', '11D7', '11D8', '11D9'] },
       condition: (data) => data.phase === 'twilight',
+      // delay 0.1s to prevent out-of-order line issues
+      delaySeconds: 0.1,
+      durationSeconds: 9,
       alertText: (data, matches, output) => {
         data.replicaCleaveCount++;
-        const dir = data.replicas[matches.targetId]?.location;
+        const dir = data.replicas[matches.id]?.location;
         if (dir === undefined || !isCardinalDir(dir))
           return;
-        const cleaveDir = matches.count === '319' ? 'right' : 'left';
+        const cleaveDir = ['11D6', '11D7'].includes(matches.param1) ? 'right' : 'left';
         const unsafeDirs = replicaCleaveUnsafeMap[dir][cleaveDir];
-        data.twilightSafe = data.twilightSafe.filter((d) => !unsafeDirs.includes(d));
-        if (data.replicaCleaveCount !== 2)
-          return;
-        const [safe0] = data.twilightSafe;
-        if (safe0 === undefined)
-          return;
-        // on the first combo, set the second safe spot to unknown, and return the first safe spot
-        // for second combo, just store the safe spot for a combined call with Wicked Special
-        if (!data.secondTwilightCleaveSafe) {
-          data.secondTwilightCleaveSafe = 'unknown';
-          return output[safe0]();
+        const firstSet = ['11D6', '11D8'].includes(matches.param1);
+        if (firstSet) {
+          data.twilightSafeFirst = data.twilightSafeFirst.filter((d) => !unsafeDirs.includes(d));
+        } else {
+          data.twilightSafeSecond = data.twilightSafeSecond.filter((d) => !unsafeDirs.includes(d));
         }
-        data.secondTwilightCleaveSafe = safe0;
+        // Once we have all four accounted for, set our second spot for use in Wicked Special combo,
+        // and then return our first safe spot
+        if (data.replicaCleaveCount !== 4)
+          return;
+        const [safeSecond] = data.twilightSafeSecond;
+        data.secondTwilightCleaveSafe = safeSecond;
+        if (data.secondTwilightCleaveSafe === undefined) {
+          data.secondTwilightCleaveSafe = 'unknown';
+        }
+        const [safeFirst] = data.twilightSafeFirst;
+        // If we couldn't find the first safe spot, at least remind players to bait puddles
+        if (safeFirst === undefined)
+          return output.bait();
+        return output.combo({
+          bait: output.bait(),
+          dir1: output[safeFirst](),
+          dir2: output[data.secondTwilightCleaveSafe](),
+        });
       },
       run: (data) => {
-        if (data.replicaCleaveCount !== 2)
+        if (data.replicaCleaveCount !== 4)
           return;
         data.replicaCleaveCount = 0;
-        data.twilightSafe = Directions.outputIntercardDir;
+        data.twilightSafeFirst = Directions.outputIntercardDir;
+        data.twilightSafeSecond = Directions.outputIntercardDir;
       },
-      outputStrings: Directions.outputStringsIntercardDir,
+      outputStrings: {
+        ...Directions.outputStringsIntercardDir,
+        bait: Outputs.baitPuddles,
+        combo: {
+          en: '${bait} => ${dir1} => ${dir2}',
+          de: '${bait} => ${dir1} => ${dir2}',
+          fr: '${bait} => ${dir1} => ${dir2}',
+          ja: '${bait} => ${dir1} => ${dir2}',
+          cn: '${bait} => ${dir1} => ${dir2}',
+          ko: '${bait} => ${dir1} => ${dir2}',
+        },
+      },
     },
     {
       id: 'R4S Twilight Sabbath + Wicked Special',
@@ -1202,8 +1589,10 @@ Options.Triggers.push({
         combo: {
           en: '${dir} => ${middleSides}',
           de: '${dir} => ${middleSides}',
+          fr: '${dir} => ${middleSides}',
           ja: '${dir} => ${middleSides}',
           cn: '${dir} => ${middleSides}',
+          ko: '${dir} => ${middleSides}',
         },
       },
     },
@@ -1261,19 +1650,39 @@ Options.Triggers.push({
         const dirStr = data.midnightFirstAdds === 'wings'
           ? (data.midnightCardFirst ? output.cardinals() : output.intercards())
           : (data.midnightCardFirst ? output.intercards() : output.cardinals());
-        return output.combo({ dir: dirStr, mech: firstMechStr });
+        const typeStr = data.midnightFirstAdds === 'wings' ? output.wings() : output.guns();
+        return output.combo({ dir: dirStr, type: typeStr, mech: firstMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          de: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          cn: '${dir} => ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          de: '${dir} + ${type} + ${mech}',
+          fr: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          cn: '${dir} + ${type} + ${mech}',
+          ko: '${dir} + ${type} + ${mech}',
+        },
+        guns: {
+          en: 'Avoid Line',
+          de: 'Weiche den Linien aus',
+          fr: 'Évitez la ligne',
+          ja: 'ビームを避けて',
+          cn: '躲避直线',
+          ko: '직선 장판 피하기',
+        },
+        wings: {
+          en: 'Donut',
+          de: 'Donut',
+          fr: 'Donut',
+          ja: 'ドーナツ',
+          cn: '月环',
+          ko: '도넛 장판',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
         partners: Outputs.stackPartner,
         spread: Outputs.spread,
+        unknown: Outputs.unknown,
       },
     },
     {
@@ -1290,14 +1699,33 @@ Options.Triggers.push({
         const dirStr = data.midnightSecondAdds === 'wings'
           ? (secondAddsOnCards ? output.cardinals() : output.intercards())
           : (secondAddsOnCards ? output.intercards() : output.cardinals());
-        return output.combo({ dir: dirStr, mech: secondMechStr });
+        const typeStr = data.midnightSecondAdds === 'wings' ? output.wings() : output.guns();
+        return output.combo({ dir: dirStr, type: typeStr, mech: secondMechStr });
       },
       outputStrings: {
         combo: {
-          en: '${dir} => ${mech}',
-          de: '${dir} => ${mech}',
-          ja: '${dir} => ${mech}',
-          cn: '${dir} => ${mech}',
+          en: '${dir} + ${type} + ${mech}',
+          de: '${dir} + ${type} + ${mech}',
+          fr: '${dir} + ${type} + ${mech}',
+          ja: '${dir} + ${type} + ${mech}',
+          cn: '${dir} + ${type} + ${mech}',
+          ko: '${dir} + ${type} + ${mech}',
+        },
+        guns: {
+          en: 'Avoid Line',
+          de: 'Weiche den Linien aus',
+          fr: 'Évitez la ligne',
+          ja: 'ビームを避けて',
+          cn: '躲避直线',
+          ko: '직선 장판 피하기',
+        },
+        wings: {
+          en: 'Donut',
+          de: 'Donut',
+          fr: 'Donut',
+          ja: 'ドーナツ',
+          cn: '月环',
+          ko: '도넛 장판',
         },
         cardinals: Outputs.cardinals,
         intercards: Outputs.intercards,
@@ -1324,8 +1752,10 @@ Options.Triggers.push({
         towers: {
           en: 'Tower Positions',
           de: 'Turm Positionen',
+          fr: 'Position tour',
           ja: '塔の位置へ',
           cn: '八人塔站位',
+          ko: '기둥 자리잡기',
         },
       },
     },
@@ -1394,8 +1824,10 @@ Options.Triggers.push({
         safe: {
           en: '${side}: Start at ${first}',
           de: '${side}: Starte ${first}',
+          fr: '${side} : Démarrez ${first}',
           ja: '${side}: まずは ${first} から',
           cn: '${side}: 从 ${first} 开始',
+          ko: '${side}: ${first}에서 시작',
         },
         unknown: Outputs.unknown,
       },
@@ -1430,14 +1862,18 @@ Options.Triggers.push({
         separator: {
           en: ' => ',
           de: ' => ',
+          fr: ' => ',
           ja: ' => ',
           cn: ' => ',
+          ko: ' => ',
         },
         safe: {
           en: '${side} Side: ${order}',
           de: '${side} Seite: ${order}',
+          fr: 'Côté ${side} : ${order}',
           ja: '${side} : ${order}',
           cn: '${side} 侧: ${order}',
+          ko: '${side}: ${order}',
         },
         unknown: Outputs.unknown,
       },
@@ -1465,26 +1901,34 @@ Options.Triggers.push({
         yellowLong: {
           en: 'Long Yellow Debuff (Towers First)',
           de: 'Langer Gelber Debuff (Turm zuerst)',
+          fr: 'Debuff jaune long (Tour en 1er)',
           ja: '長い黄色デバフ (塔から)',
           cn: '长黄 (先踩塔)',
+          ko: '긴 노란색 디버프 (기둥 먼저)',
         },
         blueLong: {
           en: 'Long Blue Debuff (Towers First)',
           de: 'Langer Blauer Debuff (Turm zuerst)',
+          fr: 'Debuff bleu long (Tour en 1er)',
           ja: '長い青色デバフ (塔から)',
           cn: '长蓝 (先踩塔)',
+          ko: '긴 파란색 디버프 (기둥 먼저)',
         },
         yellowShort: {
           en: 'Short Yellow Debuff (Cannons First)',
           de: 'Kurzer Gelber Debuff (Kanone zuerst)',
+          fr: 'Debuff jaune court (Canons en 1er)',
           ja: '短い黄色デバフ (ビーム誘導から)',
           cn: '短黄 (先引导)',
+          ko: '짧은 노란색 디버프 (레이저 먼저)',
         },
         blueShort: {
           en: 'Short Blue Debuff (Cannons First)',
           de: 'Kurzer Blauer Debuff (Kanone zuerst)',
+          fr: 'Debuff bleu court (Canons en 1er)',
           ja: '短い青色デバフ (ビーム誘導から)',
           cn: '短蓝 (先引导)',
+          ko: '짧은 파란색 디버프 (레이저 먼저)',
         },
       },
     },
@@ -1495,6 +1939,7 @@ Options.Triggers.push({
       netRegex: { id: '4.{7}', category: actorControlCategoryMap.setModelState, param1: '1C' },
       condition: (data) => data.phase === 'sunrise' && !data.seenFirstSunrise,
       // they both face opposite or adjacent, so we only need one to resolve the mechanic
+      delaySeconds: 0.2,
       suppressSeconds: 1,
       run: (data, matches) => {
         const id = matches.id;
@@ -1575,16 +2020,60 @@ Options.Triggers.push({
         // in outputStrings; see #266 for more info
         let towerSoakStr = output['unknown']();
         let cannonBaitStr = output['unknown']();
+        let cannonBaitSpots = undefined;
         if (data.sunriseTowerSpots !== undefined) {
-          towerSoakStr = output[data.sunriseTowerSpots]();
-          cannonBaitStr = data.sunriseTowerSpots === 'northSouth'
-            ? output.eastWest()
-            : output.northSouth();
+          if (data.triggerSetConfig.sunrise === 'snakePrio') {
+            if (data.sunriseTowerSpots === 'northSouth') {
+              towerSoakStr = data.role === 'dps'
+                ? output['dirN']()
+                : output['dirS']();
+            } else {
+              towerSoakStr = data.role === 'dps'
+                ? output['dirE']()
+                : output['dirW']();
+            }
+          } else {
+            towerSoakStr = output[data.sunriseTowerSpots]();
+          }
+          if (data.triggerSetConfig.sunriseUptime) {
+            cannonBaitSpots = data.sunriseTowerSpots;
+            cannonBaitStr = data.sunriseTowerSpots === 'northSouth'
+              ? output.northSouth()
+              : output.eastWest();
+          } else {
+            cannonBaitSpots = data.sunriseTowerSpots === 'northSouth'
+              ? 'eastWest'
+              : 'northSouth';
+            cannonBaitStr = data.sunriseTowerSpots === 'northSouth'
+              ? output.eastWest()
+              : output.northSouth();
+          }
         }
         if (task === 'yellowShort' || task === 'blueShort') {
           const cannonLocs = task === 'yellowShort' ? blueCannons : yellowCannons;
-          const locStr = cannonLocs.map((loc) => output[loc]()).join('/');
-          return output[task]({ loc: locStr, bait: cannonBaitStr });
+          let locStr = output['unknown']();
+          if (data.triggerSetConfig.sunrise === 'snakePrio') {
+            const dpsPrio = ['dirNE', 'dirSE', 'dirSW'];
+            const supPrio = ['dirNW', 'dirSW', 'dirSE'];
+            const cannonPrio = data.role === 'dps' ? dpsPrio : supPrio;
+            const cannon = cannonPrio.find((loc) => cannonLocs.includes(loc));
+            locStr = cannon ? output[cannon]() : output['unknown']();
+            if (cannonBaitSpots === 'northSouth') {
+              cannonBaitStr = cannon === 'dirNE' || cannon === 'dirNW'
+                ? output['dirN']()
+                : output['dirS']();
+            } else if (cannonBaitSpots === 'eastWest') {
+              cannonBaitStr = cannon === 'dirNE' || cannon === 'dirSE'
+                ? output['dirE']()
+                : output['dirW']();
+            }
+          } else {
+            locStr = cannonLocs.map((loc) => output[loc]()).join('/');
+          }
+          const finalBaitStr = data.triggerSetConfig.sunriseUptime
+            ? output.baitUptime({ bait: cannonBaitStr })
+            : output.baitNormal({ bait: cannonBaitStr });
+          return output[task]({ loc: locStr, bait: finalBaitStr });
         }
         return output[task]({ bait: towerSoakStr });
       },
@@ -1594,42 +2083,62 @@ Options.Triggers.push({
         delete data.sunriseTowerSpots;
       },
       outputStrings: {
-        ...Directions.outputStringsIntercardDir,
+        ...Directions.outputStrings8Dir,
         northSouth: {
           en: 'N/S',
           de: 'N/S',
+          fr: 'N/S',
           ja: '南/北',
-          cn: '上(北)/下(南)',
+          cn: '上/下',
+          ko: '남/북',
         },
         eastWest: {
           en: 'E/W',
           de: 'O/W',
+          fr: 'E/O',
           ja: '東/西',
-          cn: '左(西)/右(东)',
+          cn: '左/右',
+          ko: '동/서',
         },
         yellowLong: {
           en: 'Soak Tower (${bait})',
           de: 'Turm nehmen (${bait})',
+          fr: 'Prenez une tour (${bait})',
           ja: '塔を踏んで (${bait})',
           cn: '踩塔 (${bait})',
+          ko: '기둥 밟기 (${bait})',
         },
         blueLong: {
           en: 'Soak Tower (${bait})',
           de: 'Turm nehmen (${bait})',
+          fr: 'Prenez une tour (${bait})',
           ja: '塔を踏んで (${bait})',
           cn: '踩塔 (${bait})',
+          ko: '기둥 밟기 (${bait})',
+        },
+        baitNormal: {
+          en: 'Point ${bait}',
+          cn: '指向 (${bait})',
+        },
+        baitUptime: {
+          en: 'Stand ${bait} side',
+          cn: '站 ${bait} 侧',
         },
         yellowShort: {
-          en: 'Blue Cannon (${loc}) - Point ${bait}',
-          de: 'Blaue Kanone (${loc}) - Richte nach ${bait}',
+          en: 'Blue Cannon (${loc}) - ${bait}',
+          de: 'Blaue Kanone (${loc}) - ${bait}',
+          fr: 'Canon bleu ${loc}) - ${bait}',
           ja: '青いビーム誘導 (${loc}) - ${bait}',
-          cn: '蓝激光 (${loc}) - 打向 ${bait}',
+          cn: '蓝激光 (${loc}) - ${bait}',
+          ko: '파란 레이저 (${loc}) - ${bait}',
         },
         blueShort: {
           en: 'Yellow Cannon (${loc}) - Point ${bait}',
-          de: 'Gelbe Kanone (${loc}) - Richte nach ${bait}',
+          de: 'Gelbe Kanone (${loc}) - ${bait}',
+          fr: 'Canon jaune ${loc}) - ${bait}',
           ja: '黄色いビーム誘導 (${loc}) - ${bait}',
-          cn: '黄激光 (${loc}) - 打向 ${bait}',
+          cn: '黄激光 (${loc}) - ${bait}',
+          ko: '노란 레이저 (${loc}) - ${bait}',
         },
       },
     },
@@ -1739,10 +2248,9 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
-        'Electromine': 'électromine',
-        'Wicked Replica': 'copie de Wicked Thunder',
+        'Electromine': 'Électromine',
+        'Wicked Replica': 'Copie de Wicked Thunder',
         'Wicked Thunder': 'Wicked Thunder',
       },
       'replaceText': {
@@ -1768,12 +2276,14 @@ Options.Triggers.push({
         'Impact': 'Impact',
         'Ion Cluster': 'Accumulation d\'ions',
         'Laceration': 'Lacération',
+        'Left Roll': 'Rouleau gauche',
         'Lightning Cage': 'Cage d\'éclairs',
         'Lightning Vortex': 'Vortex foudroyant',
         'Midnight Sabbath': 'Diablerie obscure - Minuit',
         'Mustard Bomb': 'Bombe sulfurée',
         'Narrowing Witch Hunt': 'Piqué fulgurant condensé',
         'Raining Swords': 'Pluie d\'épées',
+        'Right Roll': 'Rouleau droite',
         'Sidewise Spark': 'Éclair latéral',
         'Soulshock': 'Choc d\'âme',
         'Stampeding Thunder': 'Tonnerre déferlant',
@@ -1794,6 +2304,26 @@ Options.Triggers.push({
         'Widening Witch Hunt': 'Piqué fulgurant élargi',
         'Witchgleam': 'Rayon éclatant',
         'Wrath of Zeus': 'Colère de Zeus',
+        '\\(debuffs resolve\\)': '(Résolution des debuffs)',
+        '\\(debuffs\\)': '(Debuffs)',
+        '\\(enrage\\)': '(Enrage)',
+        '\\(first mines hit\\)': '(Premier coup des mines)',
+        '\\(first set\\)': '(Premier Set)',
+        '\\(first sparks detonate\\)': '(Premiere explostion des étincelles)',
+        '\\(first towers/cannons resolve\\)': '(Première résolution tours/canons)',
+        '\\(floor no more\\)': '(Plus de sol)',
+        '\\(fourth set\\)': '(Quatrième set)',
+        '\\(mines\\)': '(Mines)',
+        '\\(players\\)': '(Joueurs)',
+        '\\(puddles drop\\)': '(Arrivée des puddles)',
+        '\\(second hit\\)': '(Second coup)',
+        '\\(second mines hit\\)': '(Second coup des mines)',
+        '\\(second set\\)': '(Second Set)',
+        '\\(second sparks detonate\\)': '(Seconde explostion des étincelles)',
+        '\\(second towers/cannons resolve\\)': '(Seconde résolution tours/canons)',
+        '\\(spread \\+ tethers\\)': '(Dispersion + Liens)',
+        '\\(third mines hit\\)': '(Troisième coup des mines)',
+        '\\(third set\\)': '(Troisième Set)',
       },
     },
     {
@@ -1853,6 +2383,86 @@ Options.Triggers.push({
         'Widening Witch Hunt': '円輪式ウィッチハント',
         'Witchgleam': 'シャインスパーク',
         'Wrath of Zeus': 'ラス・オブ・ゼウス',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Electromine': '雷转质矿组',
+        'Wicked Replica': '狡雷的幻影',
+        'Wicked Thunder': '狡雷',
+      },
+      'replaceText': {
+        '(?<! )Spark': '辉光电火花',
+        '(?<! )Witch Hunt': '魔女狩猎',
+        'Azure Thunder': '青雷',
+        'Bewitching Flight': '魔女回翔',
+        'Burst': '爆炸',
+        'Cannonbolt': '聚雷加农炮',
+        'Chain Lightning': '雷光链',
+        'Conduction Point': '指向雷',
+        'Cross Tail Switch': '交叉乱尾击',
+        'Eight Star': '八雷星',
+        'Electrifying Witch Hunt': '惊电魔女狩猎',
+        'Electron Stream': '电子流',
+        'Electrope Edge': '雷转质展开',
+        'Electrope Transplant': '雷转质移植',
+        'Flame Slash': '火焰斩',
+        'Forked Fissures': '惊电裂隙',
+        'Forked Lightning': '叉形闪电',
+        'Four Star': '四雷星',
+        'Fulminous Field': '雷电力场',
+        'Impact': '冲击',
+        'Ion Cluster': '离子簇',
+        'Laceration': '斩击',
+        'Left Roll': '左列',
+        'Lightning Cage': '电牢笼',
+        'Lightning Vortex': '电闪圆',
+        'Midnight Sabbath': '黑色安息日的午夜',
+        'Mustard Bomb': '芥末爆弹',
+        'Narrowing Witch Hunt': '环圆式魔女狩猎',
+        'Raining Swords': '剑雨',
+        'Right Roll': '右列',
+        'Sidewise Spark': '侧方电火花',
+        'Soulshock': '灵魂震荡',
+        'Stampeding Thunder': '奔雷炮',
+        'Sunrise Sabbath': '黑色安息日的日出',
+        'Switch of Tides': '尖尾溅',
+        'Sword Quiver': '剑舞',
+        'Tail Thrust': '尖尾刺',
+        'Thundering': '电闪环',
+        'Twilight Sabbath': '黑色安息日的日落',
+        'Wicked Blaze': '狡诡炽焰',
+        'Wicked Bolt': '狡诡落雷',
+        'Wicked Fire': '狡诡火炎',
+        'Wicked Flare': '狡诡核爆',
+        'Wicked Jolt': '狡诡摇荡',
+        'Wicked Spark': '狡诡电火花',
+        'Wicked Special': '狡诡特技',
+        'Wicked Thunder': '狡诡闪雷',
+        'Widening Witch Hunt': '圆环式魔女狩猎',
+        'Witchgleam': '辉光电火花',
+        'Wrath of Zeus': '宙斯之怒',
+        '\\(debuffs resolve\\)': '(处理 Debuff)',
+        '\\(debuffs\\)': '(Debuff)',
+        '\\(enrage\\)': '(狂暴)',
+        '\\(first mines hit\\)': '(第一轮魔方充能)',
+        '\\(first set\\)': '(第一轮充能)',
+        '\\(first sparks detonate\\)': '(第一轮火花引爆)',
+        '\\(first towers/cannons resolve\\)': '(第一轮塔/炮)',
+        '\\(floor no more\\)': '(地板消失)',
+        '\\(fourth set\\)': '(第四轮充能)',
+        '\\(mines\\)': '(魔方)',
+        '\\(players\\)': '(玩家)',
+        '\\(puddles drop\\)': '(放圈)',
+        '\\(second hit\\)': '(第二击)',
+        '\\(second mines hit\\)': '(第二轮魔方充能)',
+        '\\(second set\\)': '(第二轮充能)',
+        '\\(second sparks detonate\\)': '(第二轮火花引爆)',
+        '\\(second towers/cannons resolve\\)': '(第二轮塔/炮)',
+        '\\(spread \\+ tethers\\)': '(分散 + 连线)',
+        '\\(third mines hit\\)': '(第三轮魔方充能)',
+        '\\(third set\\)': '(第三轮充能)',
       },
     },
   ],
