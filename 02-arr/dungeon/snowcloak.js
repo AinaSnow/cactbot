@@ -1,6 +1,12 @@
 Options.Triggers.push({
   id: 'Snowcloak',
   zoneId: ZoneId.Snowcloak,
+  comments: {
+    en: 'pre-6.2 rework',
+    de: 'Vor der 6.2 Überarbeitung',
+    fr: 'Avant le remaniement 6.2',
+    cn: '6.2 改版前',
+  },
   triggers: [
     {
       id: 'Snowcloak Lunar Cry',

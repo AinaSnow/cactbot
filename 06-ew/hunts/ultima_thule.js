@@ -9,6 +9,11 @@
 Options.Triggers.push({
   id: 'UltimaThule',
   zoneId: ZoneId.UltimaThule,
+  comments: {
+    en: 'A Rank Hunts and Chi boss FATE',
+    de: 'A Rang Hohe Jagd und Chi Boss FATE',
+    cn: 'A级狩猎怪和希特殊FATE',
+  },
   triggers: [
     {
       id: 'Hunt Arch-Eta Energy Wave',

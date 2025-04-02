@@ -78,6 +78,11 @@ const tankBusterOnParty = (ceName) => (data, matches) => {
 Options.Triggers.push({
   id: 'Zadnor',
   zoneId: ZoneId.Zadnor,
+  comments: {
+    en: 'Dalriada triggers/timeline.  Some Critical Engagements.',
+    de: 'Dalriada Trigger/Timeline.  Einige Kritische Gefechte vorhanden.',
+    cn: '旗舰达尔里阿达号攻略战触发器/时间轴。部分CE (紧急遭遇战)。',
+  },
   timelineFile: 'zadnor.txt',
   resetWhenOutOfCombat: false,
   triggers: [

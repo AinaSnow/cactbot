@@ -591,16 +591,15 @@ Options.Triggers.push({
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 10,
       alertText: (data, _matches, output) => {
-        let partner = output.unknown();
+        const unknown = output.unknown();
         const myType = data.beelovedType;
         if (myType === undefined)
-          return output.merge({ player: partner });
+          return output.merge({ player: unknown });
         const orderIdx = data.beelovedDebuffs[myType].indexOf(data.me);
         if (orderIdx === -1)
-          return output.merge({ player: partner });
+          return output.merge({ player: unknown });
         const partnerType = myType === 'alpha' ? 'beta' : 'alpha';
-        partner = data.party.member(data.beelovedDebuffs[partnerType][orderIdx]).nick ??
-          output.unknown();
+        const partner = data.party.member(data.beelovedDebuffs[partnerType][orderIdx]) ?? unknown;
         return output.merge({ player: partner });
       },
       outputStrings: {
@@ -631,8 +630,8 @@ Options.Triggers.push({
         // no alert if we're one of the players; that's handled by Player Merge
         if (alpha === data.me || beta === data.me)
           return;
-        const alphaShort = data.party.member(alpha).nick ?? output.unknown();
-        const betaShort = data.party.member(beta).nick ?? output.unknown();
+        const alphaShort = data.party.member(alpha) ?? output.unknown();
+        const betaShort = data.party.member(beta) ?? output.unknown();
         return output.merge({ alpha: alphaShort, beta: betaShort });
       },
       outputStrings: {
@@ -819,6 +818,50 @@ Options.Triggers.push({
         '\\(drop\\)': '(放圈)',
         '\\(enrage\\)': '(狂暴)',
         '\\(stun for': '(眩晕',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Honey B. Lovely': '허니 B. 러블리',
+        'Sweetheart': '러블리 하트',
+      },
+      'replaceText': {
+        'Alarm Pheromones': '페로몬 경보',
+        'Bee Sting': '벌침',
+        'Big Burst': '대폭발',
+        'Blinding Love': '맹목적인 사랑',
+        'Call Me Honey': '러블리한 인사',
+        'Centerstage Combo': '사랑의 연격: 외측',
+        'Drop of Love': '사랑 방울',
+        'Drop of Venom': '독성 빗방울',
+        'Fracture': '작렬',
+        'Heart-Struck': '애통',
+        'Heartsick': '가슴앓이',
+        'Heartsore': '상심',
+        'Honey B. Finale': '허니 B. 피날레',
+        'Honey B. Live: 1st Beat': '허니 B. 라이브: 개막',
+        'Honey B. Live: 2nd Beat': '허니 B. 라이브: 절정',
+        'Honey B. Live: 3rd Beat': '허니 B. 라이브: 앙코르',
+        'Honey Beeline': '허니 폭발',
+        'Killer Sting': '살인 벌침',
+        'Laceration': '참격',
+        'Love Me Tender': '러브 미 텐더',
+        'Loveseeker': '구애',
+        'Outerstage Combo': '사랑의 연격: 내측',
+        'Poison Sting': '독침 찌르기',
+        'Rotten Heart': '흑심',
+        'Sheer Heart Attack': '심쿵사',
+        'Splash of Venom': '독성 비',
+        'Splinter': '파열',
+        'Spread Love': '사랑비',
+        'Stinging Slash': '살인 참격',
+        'Tempting Twist': '허니 회오리',
+        '\\(cast\\)': '(시전)',
+        '\\(damage\\)': '(피해)',
+        '\\(drop\\)': '(장판)',
+        '\\(enrage\\)': '(전멸기)',
+        '\\(stun for': '(기절',
       },
     },
   ],

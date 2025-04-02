@@ -11,6 +11,12 @@
 Options.Triggers.push({
   id: 'TheWorldOfDarkness',
   zoneId: ZoneId.TheWorldOfDarkness,
+  comments: {
+    en: 'Mostly incomplete',
+    de: 'Größtenteils unvollständig',
+    fr: 'Majoritairement incomplet',
+    cn: '大部分未完成',
+  },
   triggers: [
     {
       id: 'Angra Mainyu Gain Sullen',

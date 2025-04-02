@@ -34,6 +34,11 @@ const gymnasiouMandragoraiIds = [
 Options.Triggers.push({
   id: 'TheShiftingGymnasionAgonon',
   zoneId: ZoneId.TheShiftingGymnasionAgonon,
+  comments: {
+    en: 'Missing several summons',
+    de: 'Einige Beschwörungen fehlen',
+    cn: '缺失几次召唤',
+  },
   triggers: [
     // ---------------- random treasure mobs ----------------
     {

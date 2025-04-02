@@ -1,6 +1,11 @@
 Options.Triggers.push({
   id: 'Kholusia',
   zoneId: ZoneId.Kholusia,
+  comments: {
+    en: 'A Rank Hunts, missing Formidable boss FATE',
+    de: 'A Rang Hohe Jagd, Ein formidabler Kampf Boss FATE fehlt',
+    cn: 'A级狩猎怪, 缺失特殊FATE',
+  },
   triggers: [
     {
       id: 'Hunt Lil Murderer Goblin Punch',

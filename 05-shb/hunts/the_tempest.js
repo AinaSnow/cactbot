@@ -1,6 +1,11 @@
 Options.Triggers.push({
   id: 'TheTempest',
   zoneId: ZoneId.TheTempest,
+  comments: {
+    en: 'A Rank Hunts, missing Archaeotania boss FATE',
+    de: 'A Rang Hohe Jagd, Archaeotania Boss FATE fehlt',
+    cn: 'A级狩猎怪, 缺失特殊FATE',
+  },
   triggers: [
     {
       id: 'Hunt Baal Sewer Water Front',

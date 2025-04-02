@@ -1,6 +1,11 @@
 Options.Triggers.push({
   id: 'MareLamentorum',
   zoneId: ZoneId.MareLamentorum,
+  comments: {
+    en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    cn: 'A级狩猎怪',
+  },
   resetWhenOutOfCombat: false,
   initData: () => {
     return {

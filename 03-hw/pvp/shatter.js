@@ -9,6 +9,12 @@ const bNpcNameIds = Object.keys(bNpcNameIdToLocation);
 Options.Triggers.push({
   id: 'TheFieldsOfGloryShatter',
   zoneId: ZoneId.TheFieldsOfGloryShatter,
+  comments: {
+    en: 'pre-6.4 rework',
+    de: 'Vor der 6.4 Überarbeitung',
+    fr: 'Avant le remaniement 6.4',
+    cn: '6.4改版前',
+  },
   triggers: [
     // https://xivapi.com/LogMessage/2652
     // en: <Clickable(<SheetEn(BNpcName,2,IntegerParameter(1),1,1)/>)/> activates and begins to emit heat.

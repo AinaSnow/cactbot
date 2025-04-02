@@ -1,6 +1,11 @@
 Options.Triggers.push({
   id: 'Garlemald',
   zoneId: ZoneId.Garlemald,
+  comments: {
+    en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    cn: 'A级狩猎怪',
+  },
   triggers: [
     {
       id: 'Hunt Aegeiros Leafstorm',

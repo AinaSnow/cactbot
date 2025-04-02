@@ -1,6 +1,11 @@
 Options.Triggers.push({
   id: 'Elpis',
   zoneId: ZoneId.Elpis,
+  comments: {
+    en: 'A Rank Hunts',
+    de: 'A Rang Hohe Jagd',
+    cn: 'A级狩猎怪',
+  },
   triggers: [
     {
       id: 'Hunt Gurangatch Left Hammer Slammer',
