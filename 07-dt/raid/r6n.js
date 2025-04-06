@@ -271,6 +271,9 @@ Options.Triggers.push({
   id: 'AacCruiserweightM2',
   zoneId: ZoneId.AacCruiserweightM2,
   timelineFile: 'r6n.txt',
+  initData: () => ({
+    colorRiotTargets: [],
+  }),
   triggers: [
     {
       id: 'R6N Mousse Mural',
@@ -290,7 +293,22 @@ Options.Triggers.push({
       id: 'R6N Color Riot',
       type: 'HeadMarker',
       netRegex: { id: headMarkerData.tankbuster, capture: true },
-      response: Responses.tankCleave(),
+      infoText: (data, matches, output) => {
+        data.colorRiotTargets.push(matches.target);
+        if (data.colorRiotTargets.length < 2)
+          return;
+        if (data.colorRiotTargets.includes(data.me))
+          return output.cleaveOnYou();
+        return output.avoidCleave();
+      },
+      run: (data) => {
+        if (data.colorRiotTargets.length >= 2)
+          data.colorRiotTargets = [];
+      },
+      outputStrings: {
+        cleaveOnYou: Outputs.tankCleaveOnYou,
+        avoidCleave: Outputs.avoidTankCleave,
+      },
     },
     {
       id: 'R6N Mousse Touch-up',
@@ -308,6 +326,7 @@ Options.Triggers.push({
       outputStrings: {
         stacks: {
           en: 'Healer Groups (in water)',
+          cn: '治疗分组分摊 (站在水里)',
         },
       },
     },
@@ -320,6 +339,7 @@ Options.Triggers.push({
       outputStrings: {
         spread: {
           en: 'Spread (not in water)',
+          cn: '分散 (站在岸上)',
         },
       },
     },
