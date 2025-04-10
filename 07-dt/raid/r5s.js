@@ -4,23 +4,29 @@ const snapTwistIdMap = {
   'A728': ['two', 'west'],
   'A729': ['two', 'west'],
   'A72A': ['two', 'west'],
+  'A4DB': ['two', 'west'],
   'A72B': ['two', 'east'],
   'A72C': ['two', 'east'],
   'A72D': ['two', 'east'],
+  'A4DC': ['two', 'east'],
   // 3-snap Twist & Drop the Needle
   'A730': ['three', 'west'],
   'A731': ['three', 'west'],
   'A732': ['three', 'west'],
+  'A4DD': ['three', 'west'],
   'A733': ['three', 'east'],
   'A734': ['three', 'east'],
   'A735': ['three', 'east'],
+  'A4DE': ['three', 'east'],
   // 4-snap Twist & Drop the Needle
   'A739': ['four', 'west'],
   'A73A': ['four', 'west'],
   'A73B': ['four', 'west'],
+  'A4DF': ['four', 'west'],
   'A73C': ['four', 'east'],
   'A73D': ['four', 'east'],
   'A73E': ['four', 'east'],
+  'A4E0': ['four', 'east'],
 };
 // map of Frogtourage cast ids to safe dirs
 const feverIdMap = {
@@ -78,6 +84,7 @@ Options.Triggers.push({
         stored: {
           en: '(${mech} later)',
           cn: '(稍后 ${mech})',
+          ko: '(나중에 ${mech})',
         },
         lightParty: Outputs.healerGroups,
         roleGroup: Outputs.rolePositions,
@@ -102,6 +109,7 @@ Options.Triggers.push({
         combo: {
           en: 'Start ${dir} (${num} hits) => ${mech}',
           cn: '${dir} 开始 (打 ${num} 次) => ${mech}',
+          ko: '${dir} 시작 (${num}번 공격) => ${mech}',
         },
         lightParty: Outputs.healerGroups,
         roleGroup: Outputs.rolePositions,
@@ -144,10 +152,12 @@ Options.Triggers.push({
         shortBurn: {
           en: '(short cleanse)',
           cn: '(短舞点名)',
+          ko: '(짧은 디버프)',
         },
         longBurn: {
           en: '(long cleanse)',
           cn: '(长舞点名)',
+          ko: '(긴 디버프)',
         },
       },
     },
@@ -165,6 +175,7 @@ Options.Triggers.push({
         cleanse: {
           en: 'Cleanse in spotlight',
           cn: '灯下跳舞',
+          ko: '스포트라이트에 서기',
         },
       },
     },
@@ -186,10 +197,12 @@ Options.Triggers.push({
         cleanse: {
           en: 'Cleanse in spotlight',
           cn: '灯下跳舞',
+          ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
           cn: '引导青蛙',
+          ko: '개구리 유도',
         },
       },
     },
@@ -212,10 +225,12 @@ Options.Triggers.push({
         cleanse: {
           en: 'Cleanse in spotlight',
           cn: '灯下跳舞',
+          ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
           cn: '引导青蛙',
+          ko: '개구리 유도',
         },
       },
     },
@@ -229,6 +244,7 @@ Options.Triggers.push({
         insideOut: {
           en: 'Max Melee => Under',
           cn: '钢铁 => 月环',
+          ko: '칼끝딜 => 안으로',
         },
       },
     },
@@ -242,6 +258,7 @@ Options.Triggers.push({
         outsideIn: {
           en: 'Under => Max Melee',
           cn: '月环 => 钢铁',
+          ko: '안으로 => 칼끝딜',
         },
       },
     },
@@ -294,18 +311,28 @@ Options.Triggers.push({
       outputStrings: {
         merge: {
           en: '${order} merge',
+          cn: '${order} 撞毒',
+          ko: '${order} 융합',
         },
         first: {
           en: 'First',
+          cn: '第1组',
+          ko: '첫번째',
         },
         second: {
           en: 'Second',
+          cn: '第2组',
+          ko: '두번째',
         },
         third: {
           en: 'Third',
+          cn: '第3组',
+          ko: '세번째',
         },
         fourth: {
           en: 'Fourth',
+          cn: '第4组',
+          ko: '네번째',
         },
         unknown: Outputs.unknown,
       },
@@ -321,6 +348,7 @@ Options.Triggers.push({
         merge: {
           en: 'Merge debuff',
           cn: '撞毒',
+          ko: '융합하기',
         },
       },
     },
@@ -373,6 +401,47 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: 'A770', source: 'Dancing Green', capture: false },
       response: Responses.bigAoe(),
+    },
+  ],
+  timelineReplace: [
+    {
+      locale: 'ja',
+      replaceSync: {
+        'Dancing Green': 'ダンシング・グリーン',
+        'Frogtourage': 'カモン！ フロッグダンサー',
+      },
+      replaceText: {
+        'Deep Cut': 'ディープカット',
+        'Flip to A-side': 'ジングル予約A',
+        'Flip to B-side': 'ジングル予約B',
+        '2-snap Twist & Drop the Needle': '2ポイント、ポーズ&ジングル',
+        '3-snap Twist & Drop the Needle': '3ポイント、ポーズ&ジングル',
+        '4-snap Twist & Drop the Needle': '4ポイント、ポーズ&ジングル',
+        'Play A-side': 'ラウドジングルA',
+        'Play B-side': 'ラウドジングルB',
+        'Celebrate Good Times': 'セレブレート・グッドタイムズ',
+        'Disco Infernal': 'ディスコインファーナル',
+        'Funky Floor': 'ダンシングフィールド',
+        'Inside Out': 'インサイドアウト',
+        'Outside In': 'アウトサイドイン',
+        'Ensemble Assemble': 'ダンサーズ・アッセンブル',
+        'Arcady Night Fever': 'アルカディア・ナイトフィーバー',
+        'Get Down!': 'ゲットダウン！',
+        'Let\'s Dance': 'レッツダンス！',
+        'Freak Out': '静音爆発',
+        'Let\'s Pose': 'レッツポーズ！',
+        'Ride the Waves': 'ウェーブ・オン・ウェーブ',
+        'Quarter Beats': '4ビート',
+        'Eighth Beats': '8ビート',
+        'Frogtourage': 'カモン！ フロッグダンサー',
+        'Moonburn': 'ムーンバーン',
+        'Back-up Dance': 'ダンシングウェーブ',
+        'Arcady Night Encore Starts': 'ナイトフィーバー・アンコール',
+        'Let\'s Dance! Remix': 'レッツダンス・ダンス・ダンス！',
+        'Do the Hustle': 'ドゥ・ザ・ハッスル',
+        'Frogtourage Finale': 'ファイナル・アッセンブル',
+        'Hi-NRG Fever': 'ハイエナジー・ナイトフィーバー',
+      },
     },
   ],
 });
