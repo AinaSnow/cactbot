@@ -21,6 +21,14 @@ const dirToSameCorners = (dir) => {
   }
   return [];
 };
+const headMarkerData = {
+  // Jabberwock bind/death target
+  'bindMarker': '0017',
+  // Lightning Storm target
+  'lightningStormMarker': '025A',
+  // Pudding Party x5 stack
+  'puddingPartyMarker': '0131',
+};
 Options.Triggers.push({
   id: 'AacCruiserweightM2Savage',
   zoneId: ZoneId.AacCruiserweightM2Savage,
@@ -46,13 +54,50 @@ Options.Triggers.push({
       id: 'R6S Sticky Mousse',
       type: 'StartsUsing',
       netRegex: { id: 'A695', source: 'Sugar Riot', capture: false },
-      response: Responses.spread(),
+      response: Responses.spreadThenStack(),
+    },
+    {
+      id: 'R6S Color Riot Debuff Tracker',
+      type: 'GainsEffect',
+      netRegex: { effectId: ['1163', '1164'], capture: true },
+      condition: Conditions.targetIsYou(),
+      run: (data, matches) => data.colorRiotTint = matches.effectId === '1163' ? 'warm' : 'cool',
     },
     {
       id: 'R6S Color Riot',
       type: 'StartsUsing',
-      netRegex: { id: ['A691', 'A692'], source: 'Sugar Riot' },
-      response: Responses.tankCleave(),
+      netRegex: { id: ['A691', 'A692'], source: 'Sugar Riot', capture: true },
+      alertText: (data, matches, output) => {
+        if (data.role !== 'tank')
+          return output.avoidCleave();
+        const coolInOut = matches.id === 'A691' ? output.in() : output.out();
+        const warmInOut = matches.id === 'A692' ? output.in() : output.out();
+        switch (data.colorRiotTint) {
+          case 'warm':
+            return output.coolCleave({ dir: coolInOut });
+          case 'cool':
+            return output.warmCleave({ dir: warmInOut });
+          default:
+            return output.tankCleave();
+        }
+      },
+      outputStrings: {
+        avoidCleave: {
+          en: 'Be on boss hitbox (avoid tank cleaves)',
+          ko: '보스 히트박스 경계에 있기 (광역 탱버 피하기)',
+        },
+        warmCleave: {
+          en: 'Tank cleave on YOU (${dir} => get hit by Red)',
+          ko: '광역 탱버 대상자 (${dir} => 빨간색 맞기)',
+        },
+        coolCleave: {
+          en: 'Tank cleave on YOU (${dir} => get hit by Blue)',
+          ko: '광역 탱버 대상자 (${dir} => 파란색 맞기)',
+        },
+        tankCleave: Outputs.tankCleaveOnYou,
+        in: Outputs.in,
+        out: Outputs.out,
+      },
     },
     {
       id: 'R6S Color Clash',
@@ -67,6 +112,8 @@ Options.Triggers.push({
         partners: Outputs.stackPartner,
         stored: {
           en: 'Stored ${mech} for later',
+          de: '${mech} gespeichert für später',
+          fr: '${mech} sauvegardé pour après',
           cn: '稍后 ${mech}',
           ko: '나중에 ${mech}',
         },
@@ -77,7 +124,7 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: ['A68B', 'A68D'], source: 'Sugar Riot', capture: true },
       delaySeconds: 18,
-      infoText: (_data, matches, output) => {
+      alertText: (_data, matches, output) => {
         const mech = matches.id === 'A68B' ? 'healerStacks' : 'partners';
         return output[mech]();
       },
@@ -93,9 +140,10 @@ Options.Triggers.push({
       run: (data, matches) => data.lastDoubleStyle = doubleStyleMap[matches.id],
     },
     {
+      // tether source is from the actor to the boss
       id: 'R6S Double Style Tether Tracker',
       type: 'Tether',
-      netRegex: { targetId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'], capture: true },
+      netRegex: { sourceId: '4[0-9A-Fa-f]{7}', id: ['013F', '0140'], capture: true },
       condition: (data) => data.lastDoubleStyle !== undefined,
       preRun: (data, matches) => data.tetherTracker[matches.sourceId] = matches,
       infoText: (data, _matches, output) => {
@@ -117,12 +165,16 @@ Options.Triggers.push({
           'dirSW': 'dirNE',
           'unknown': 'unknown',
         };
+        // clean-up so we don't trigger on other tether mechanics
+        delete data.lastDoubleStyle;
         const tethers = Object.entries(data.tetherTracker);
         data.tetherTracker = {};
         for (const [id, tether] of tethers) {
           const actorSetPosData = data.actorSetPosTracker[id];
-          if (actorSetPosData === undefined)
+          if (actorSetPosData === undefined) {
+            console.log(`R6S Double Style Tether Tracker - Missing actor position data!`);
             return;
+          }
           const actorType = doubleStyle[tether.id === '013F' ? 'red' : 'blue'];
           const x = parseFloat(actorSetPosData.x);
           const y = parseFloat(actorSetPosData.y);
@@ -147,7 +199,7 @@ Options.Triggers.push({
         }
         const [dir] = safeDirs;
         if (safeDirs.length !== 1 || dir === undefined) {
-          console.log(`R6S Double Style Tether Tracker - Invalid data!`);
+          console.log(`R6S Double Style Tether Tracker - Missing direction data!`);
           return;
         }
         const startDir = startDirMap[dir] ?? 'unknown';
@@ -160,9 +212,276 @@ Options.Triggers.push({
         ...Directions.outputStringsIntercardDir,
         text: {
           en: 'Start ${dir1}, launch towards ${dir2}',
+          de: 'Start ${dir1}, Rückstoß nach ${dir2}',
+          fr: 'Commencez ${dir1}, lancez vers ${dir2}',
           cn: '从 ${dir1} 飞向 ${dir2}',
           ko: '${dir1}에서 ${dir2}으로 발사되기',
         },
+      },
+    },
+    {
+      id: 'R6S Heating Up Early Warning',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1166', capture: true },
+      condition: (data, matches) => data.me === matches.target && data.role !== 'healer',
+      infoText: (_data, _matches, output) => output.defamationLater(),
+      outputStrings: {
+        defamationLater: {
+          en: 'Defamation on YOU (for later)',
+          ko: '광역징 대상자 (나중에)',
+        },
+      },
+    },
+    {
+      id: 'R6S Heating Up',
+      type: 'GainsEffect',
+      netRegex: { effectId: '1166', capture: true },
+      condition: Conditions.targetIsYou(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      countdownSeconds: 5,
+      alertText: (_data, _matches, output) => output.defamation(),
+      outputStrings: {
+        defamation: Outputs.defamationOnYou,
+      },
+    },
+    {
+      // tether source is from the player to the boss
+      id: 'R6S Pudding Graf',
+      type: 'Tether',
+      netRegex: { id: ['013F', '0140'], capture: true },
+      condition: (data, matches) => data.me === matches.source,
+      infoText: (_data, matches, output) => {
+        if (matches.id === '013F')
+          return output.wingedBomb();
+        return output.bomb();
+      },
+      outputStrings: {
+        bomb: {
+          en: 'Drop bomb in quicksand',
+          ko: '늪에 폭탄 놓기',
+        },
+        wingedBomb: {
+          en: 'Aim bomb towards quicksand',
+          ko: '늪 쪽을 향해 폭탄 놓기',
+        },
+      },
+    },
+    {
+      id: 'R6S Jabberwock Bind Marker',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.bindMarker, capture: true },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Jabberwock on YOU',
+          ko: '재버워크 대상자',
+        },
+      },
+    },
+    {
+      id: 'R6S Ready Ore Not',
+      type: 'StartsUsing',
+      netRegex: { id: 'A6AA', source: 'Sugar Riot', capture: false },
+      response: Responses.bigAoe(),
+    },
+    {
+      id: 'R6S Single Style',
+      type: 'StartsUsing',
+      netRegex: { id: '9A3D', source: 'Sugar Riot', capture: false },
+      infoText: (_data, _matches, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid arrow lines',
+          ko: '화살 직선 장판 피하기',
+        },
+      },
+    },
+    {
+      id: 'R6S Double Style Taste of Fire/Thunder',
+      type: 'StartsUsing',
+      netRegex: { id: ['A687', 'A689'], source: 'Sugar Riot', capture: true },
+      suppressSeconds: 1,
+      alertText: (_data, matches, output) =>
+        matches.id === 'A687' ? output.fire() : output.thunder(),
+      outputStrings: {
+        fire: {
+          en: 'Healer groups in water, avoid arrow lines',
+          ko: '물에서 힐러 그룹, 화살 직선 장판 피하기',
+        },
+        thunder: {
+          en: 'Spread out of water, avoid arrow lines',
+          ko: '물 밖에서 산개, 화살 직선 장판 피하기',
+        },
+      },
+    },
+    {
+      id: 'R6S Taste of Thunder (Twister/Stepped Leader)',
+      type: 'StartsUsing',
+      netRegex: { id: 'A69D', source: 'Sugar Riot', capture: false },
+      suppressSeconds: 1,
+      response: Responses.moveAway(),
+    },
+    {
+      id: 'R6S Lightning Storm',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.lightningStormMarker, capture: true },
+      condition: Conditions.targetIsYou(),
+      response: Responses.spread('alert'),
+    },
+    {
+      id: 'R6S Pudding Party',
+      type: 'HeadMarker',
+      netRegex: { id: headMarkerData.puddingPartyMarker, capture: true },
+      infoText: (data, matches, output) => {
+        if (data.me === matches.target)
+          return output.stackOnYou();
+        return output.stackOn({ target: matches.target });
+      },
+      outputStrings: {
+        stackOnYou: {
+          en: 'Stack on YOU x5',
+          ko: '쉐어 x5 대상자',
+        },
+        stackOn: {
+          en: 'Stack on ${target} x5',
+          ko: '쉐어 x5 ${target}',
+        },
+      },
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Mouthwatering Morbol': 'Zucker-Morbol',
+        'Sugar Riot': 'Zuckerschock',
+        'Sweet Shot': 'Zuckerpfeil',
+      },
+      'replaceText': {
+        '\\(cast\\)': '(wirken)',
+        '\\(snapshot\\)': '(Speichern)',
+        '--Yan targetable--': '--Putschi anvisierbar--',
+        '--2x Mu targetable--': '--2x Mu anvisierbar--',
+        '--Gimme Cat targetable--': '--Bettelcat anvisierbar--',
+        '--2x Feather Ray targetable--': '--2x Federrochen anvisierbar--',
+        '--Jabberwock targetable--': '--Brabbelback anvisierbar--',
+        'Artistic Anarchy': 'Artistische Anarchie',
+        'Bad Breath': 'Schlechter Atem',
+        'Brûlée': 'Wärmeentladung',
+        'Burst': 'Explosion',
+        'Color Clash': 'Farbbruch',
+        'Color Riot': 'Farbenschock',
+        'Cool Bomb': 'Kalte Farbbombe',
+        'Crowd Brûlée': 'Hitzeentladung',
+        'Dark Mist': 'Schattenhauch',
+        'Double Style': 'Doppel-Graffiti',
+        'Layer': 'Feinschliff',
+        'Levin Drop': 'Stromfluss',
+        'Lightning Bolt': 'Blitzschlag',
+        'Lightning Storm': 'Blitzsturm',
+        'Live Painting': 'Sofortkunst',
+        'Moussacre': 'Mousse-Marsch',
+        'Mousse Drip': 'Mousse-Spritzer',
+        'Mousse Mural': 'Mousse-Regen',
+        'Pudding Graf': 'Pudding-Platzer',
+        'Pudding Party': 'Pudding-Party',
+        'Ready Ore Not': 'Edelstein-Regen',
+        'Rush': 'Stürmen',
+        'Single Style': 'Einzel-Graffiti',
+        'Soul Sugar': 'Zuckerseele',
+        'Spray Pain': 'Nadelschuss',
+        'Sticky Mousse': 'Klebriges Mousse',
+        'Sugarscape': 'Landschaftsmalerei',
+        'Taste of Fire': 'Zuckerfeuer',
+        'Taste of Thunder': 'Zuckerblitz',
+        'Warm Bomb': 'Warme Farbbombe',
+        'Wingmark': 'Flügelzeichen',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Mouthwatering Morbol': 'Morbol mielleux',
+        'Sugar Riot': 'Sugar Riot',
+        'Sweet Shot': 'Flèche sirupeuse',
+      },
+      'replaceText': {
+        'Artistic Anarchy': 'Anarchie artistique',
+        'Bad Breath': 'Mauvaise haleine',
+        'Brûlée': 'Dissipation thermique',
+        'Burst': 'Explosion',
+        'Color Clash': 'Impact chromatique',
+        'Color Riot': 'Révolte chromatique',
+        'Cool Bomb': 'Bombe de couleurs froides',
+        'Crowd Brûlée': 'Dissipation enflammée',
+        'Dark Mist': 'Brume funèbre',
+        'Double Style': 'Double graffiti',
+        'Layer': 'Retouche',
+        'Levin Drop': 'Courant électrique',
+        'Lightning Bolt': 'Fulguration',
+        'Lightning Storm': 'Pluie d\'éclairs',
+        'Live Painting': 'Peinture vivante',
+        'Moussacre': 'Défilé de mousse',
+        'Mousse Drip': 'Mousse éclaboussante',
+        'Mousse Mural': 'Averse de mousse',
+        'Pudding Graf': 'Pudding pétulent',
+        'Pudding Party': 'Fête du flan',
+        'Ready Ore Not': 'Gemmes la pluie !',
+        'Rush': 'Ruée',
+        'Single Style': 'Graffiti simple',
+        'Soul Sugar': 'Âme en sucre',
+        'Spray Pain': 'Aiguilles foudroyantes',
+        'Sticky Mousse': 'Mousse collante',
+        'Sugarscape': 'Nature morte',
+        'Taste of Fire': 'Feu sirupeux',
+        'Taste of Thunder': 'Foudre sucrée',
+        'Warm Bomb': 'Bombe de couleurs chaudes',
+        'Wingmark': 'Emblème ailé',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Mouthwatering Morbol': 'シュガーズモルボル',
+        'Sugar Riot': 'シュガーライオット',
+        'Sweet Shot': 'シュガーズアロー',
+      },
+      'replaceText': {
+        'Artistic Anarchy': 'アーティスティック・アナーキー',
+        'Bad Breath': '臭い息',
+        'Brûlée': '熱放散',
+        'Burst': '爆発',
+        'Color Clash': 'カラークラッシュ',
+        'Color Riot': 'カラーライオット',
+        'Cool Bomb': 'コールドペイントボム',
+        'Crowd Brûlée': '重熱放散',
+        'Dark Mist': 'ダークミスト',
+        'Double Style': 'ダブル・グラフィティ',
+        'Layer': 'アレンジ',
+        'Levin Drop': '雷流',
+        'Lightning Bolt': 'いなずま',
+        'Lightning Storm': '百雷',
+        'Live Painting': 'ライブペインティング',
+        'Moussacre': 'ムース大行進',
+        'Mousse Drip': 'びちゃっとムース',
+        'Mousse Mural': 'ムースシャワー',
+        'Pudding Graf': 'ぼっかんプリン',
+        'Pudding Party': 'プリンパーティー',
+        'Ready Ore Not': '原石あげる',
+        'Rush': '突進',
+        'Single Style': 'シングル・グラフィティ',
+        'Soul Sugar': 'シュガーソウル',
+        'Spray Pain': '針飛ばし',
+        'Sticky Mousse': 'ねばねばムース',
+        'Sugarscape': 'ランドスケープ',
+        'Taste of Fire': 'シュガーファイア',
+        'Taste of Thunder': 'シュガーサンダー',
+        'Warm Bomb': 'ウォームペイントボム',
+        'Wingmark': 'ウイングマーク',
       },
     },
   ],

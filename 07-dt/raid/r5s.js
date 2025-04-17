@@ -83,6 +83,8 @@ Options.Triggers.push({
       outputStrings: {
         stored: {
           en: '(${mech} later)',
+          de: '(${mech} später)',
+          fr: '(${mech} après)',
           cn: '(稍后 ${mech})',
           ko: '(나중에 ${mech})',
         },
@@ -108,6 +110,8 @@ Options.Triggers.push({
       outputStrings: {
         combo: {
           en: 'Start ${dir} (${num} hits) => ${mech}',
+          de: 'Start ${dir} (${num} Treffer) => ${mech}',
+          fr: 'Commencez ${dir} (${num} coups) => ${mech}',
           cn: '${dir} 开始 (打 ${num} 次) => ${mech}',
           ko: '${dir} 시작 (${num}번 공격) => ${mech}',
         },
@@ -151,11 +155,15 @@ Options.Triggers.push({
       outputStrings: {
         shortBurn: {
           en: '(short cleanse)',
+          de: '(kurze Reinigung)',
+          fr: '(compteur court)',
           cn: '(短舞点名)',
           ko: '(짧은 디버프)',
         },
         longBurn: {
           en: '(long cleanse)',
+          de: '(lange Reinigung)',
+          fr: '(compteur long)',
           cn: '(长舞点名)',
           ko: '(긴 디버프)',
         },
@@ -174,6 +182,8 @@ Options.Triggers.push({
       outputStrings: {
         cleanse: {
           en: 'Cleanse in spotlight',
+          de: 'Reinige im Scheinwerfer',
+          fr: 'Purifiez sous le spot',
           cn: '灯下跳舞',
           ko: '스포트라이트에 서기',
         },
@@ -196,11 +206,15 @@ Options.Triggers.push({
       outputStrings: {
         cleanse: {
           en: 'Cleanse in spotlight',
+          de: 'Reinige im Scheinwerfer',
+          fr: 'Purifiez sous le spot',
           cn: '灯下跳舞',
           ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
+          de: 'Frosch ködern',
+          fr: 'Prenez la grenouille',
           cn: '引导青蛙',
           ko: '개구리 유도',
         },
@@ -224,11 +238,15 @@ Options.Triggers.push({
       outputStrings: {
         cleanse: {
           en: 'Cleanse in spotlight',
+          de: 'Reinige im Scheinwerfer',
+          fr: 'Purifiez sous le spot',
           cn: '灯下跳舞',
           ko: '스포트라이트에 서기',
         },
         bait: {
           en: 'Bait Frog',
+          de: 'Frosch ködern',
+          fr: 'Prenez la grenouille',
           cn: '引导青蛙',
           ko: '개구리 유도',
         },
@@ -243,6 +261,8 @@ Options.Triggers.push({
       outputStrings: {
         insideOut: {
           en: 'Max Melee => Under',
+          de: 'Max Nahkampf => Unter ihn',
+          fr: 'Max mêlée => Dessous',
           cn: '钢铁 => 月环',
           ko: '칼끝딜 => 안으로',
         },
@@ -257,6 +277,8 @@ Options.Triggers.push({
       outputStrings: {
         outsideIn: {
           en: 'Under => Max Melee',
+          de: 'Unter ihn => Max Nahkampf',
+          fr: 'Dessous => Max mêlée',
           cn: '月环 => 钢铁',
           ko: '안으로 => 칼끝딜',
         },
@@ -311,26 +333,36 @@ Options.Triggers.push({
       outputStrings: {
         merge: {
           en: '${order} merge',
+          de: '${order} berühren',
+          fr: '${order} fusion',
           cn: '${order} 撞毒',
           ko: '${order} 융합',
         },
         first: {
           en: 'First',
+          de: 'Erstes',
+          fr: 'Première',
           cn: '第1组',
           ko: '첫번째',
         },
         second: {
           en: 'Second',
+          de: 'Zweites',
+          fr: 'Seconde',
           cn: '第2组',
           ko: '두번째',
         },
         third: {
           en: 'Third',
+          de: 'Drittes',
+          fr: 'Troisième',
           cn: '第3组',
           ko: '세번째',
         },
         fourth: {
           en: 'Fourth',
+          de: 'Viertes',
+          fr: 'Quatrième',
           cn: '第4组',
           ko: '네번째',
         },
@@ -347,6 +379,8 @@ Options.Triggers.push({
       outputStrings: {
         merge: {
           en: 'Merge debuff',
+          de: 'Debuff berühren',
+          fr: 'Fusionner le debuff',
           cn: '撞毒',
           ko: '융합하기',
         },
@@ -405,12 +439,28 @@ Options.Triggers.push({
   ],
   timelineReplace: [
     {
-      locale: 'ja',
-      replaceSync: {
+      'locale': 'de',
+      'replaceSync': {
+        'Dancing Green': 'Springhis Khan',
+        'Frogtourage': 'Schenkelschwinger',
+      },
+      'replaceText': {},
+    },
+    {
+      'locale': 'fr',
+      'replaceSync': {
+        'Dancing Green': 'Dancing Green',
+        'Frogtourage': 'Danceur batracien',
+      },
+      'replaceText': {},
+    },
+    {
+      'locale': 'ja',
+      'replaceSync': {
         'Dancing Green': 'ダンシング・グリーン',
         'Frogtourage': 'カモン！ フロッグダンサー',
       },
-      replaceText: {
+      'replaceText': {
         'Deep Cut': 'ディープカット',
         'Flip to A-side': 'ジングル予約A',
         'Flip to B-side': 'ジングル予約B',
