@@ -10,14 +10,7 @@ Options.Triggers.push({
       beforeSeconds: 4,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'stack with your group',
-          de: 'mit der Gruppe stacken',
-          fr: 'Packez avec votre groupe',
-          ja: 'グループ別にスタック',
-          cn: '分组分摊',
-          ko: '쉐어징',
-        },
+        text: Outputs.healerGroups,
       },
     },
     {
@@ -27,31 +20,26 @@ Options.Triggers.push({
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'line stack',
-          de: 'Linien-Stack',
-          fr: 'Packez-vous en ligne',
-          ja: 'スタック',
-          cn: '直线分摊',
-          ko: '직선 쉐어',
-        },
+        text: Outputs.stackMarker,
       },
     },
     {
       id: 'SeiryuEx Tether',
       regex: /Kanabo/,
       beforeSeconds: 7,
-      condition: (data) => data.role === 'tank' || data.job === 'BLU',
-      alertText: (_data, _matches, output) => output.text(),
+      alertText: (data, _matches, output) => {
+        if (data.role === 'tank' || data.job === 'BLU')
+          return output.grabTether();
+        return output.avoidTether();
+      },
       outputStrings: {
-        text: {
-          en: 'Grab Tether, Point Away',
-          de: 'Verbindung nehmen und wegdrehen',
-          fr: 'Prenez le lien, pointez vers l\'extérieur',
-          ja: '線を取って外に向ける',
-          cn: '接线引导向场外',
-          ko: '선 가로채고 구석으로 유도하기',
+        grabTether: {
+          en: 'Grab Tank Tether, Point Cleave Away',
+          fr: 'Prenez le lien Tank, visez l\'extérieur',
+          cn: '接走坦克连线，引导扇形远离人群',
+          ko: '탱커 선 가져오기, 탱버 밖으로 향하게 하기',
         },
+        avoidTether: Outputs.avoidTankCleaves,
       },
     },
   ],
@@ -61,6 +49,12 @@ Options.Triggers.push({
       type: 'StartsUsing',
       netRegex: { id: '37E4', source: 'Seiryu', capture: false },
       run: (data) => data.blazing = true,
+    },
+    {
+      id: 'SeiryuEx Fifth Element',
+      type: 'StartsUsing',
+      netRegex: { id: '37C3', source: 'Seiryu', capture: false },
+      response: Responses.aoe(),
     },
     {
       id: 'SeiryuEx Cursekeeper',
@@ -119,14 +113,7 @@ Options.Triggers.push({
       delaySeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'Stack for Puddle AOEs',
-          de: 'Stacken (Pfützen)',
-          fr: 'Packez-vous pour l\'AoE',
-          ja: 'スタック',
-          cn: '集合放置AOE',
-          ko: '중앙에 모이기',
-        },
+        text: Outputs.baitPuddles,
       },
     },
     {
@@ -215,30 +202,50 @@ Options.Triggers.push({
     },
     {
       id: 'SeiryuEx Find Sneks',
-      type: 'StartsUsing',
-      netRegex: { id: '37F7', source: 'Seiryu', capture: false },
-      alarmText: (data, _matches, output) => {
+      type: 'StartsUsingExtra',
+      netRegex: { id: '37F7', capture: true },
+      alarmText: (data, matches, output) => {
+        // Blue Orochi spawn east or west with heading of either -1.57 or 1.57.
+        // Invert their spawn heading to find the safe location.
+        // No source because sometimes the name field is stale.
+        const safeDir4Num = (Directions.hdgTo4DirNum(parseFloat(matches.heading)) + 2) % 4;
+        if (safeDir4Num !== 1 && safeDir4Num !== 3) {
+          if (data.withForce === undefined)
+            return output.goToUnknownSnakes();
+          return output.outOfMiddleUnknownSnakes();
+        }
+        const safeDir = Directions.outputFromCardinalNum(safeDir4Num);
         if (data.withForce === undefined)
-          return output.goToSnakes();
-        return output.outOfMiddleTowardSnakes();
+          return output.goToSnakes({ dir: output[safeDir]() });
+        return output.outOfMiddleTowardSnakes({ dir: output[safeDir]() });
       },
       run: (data) => data.withForce = true,
       outputStrings: {
+        dirE: Outputs.east,
+        dirW: Outputs.west,
         goToSnakes: {
-          en: 'Go To Snakes',
-          de: 'Zu den Schlangen',
+          en: 'Go ${dir} Toward Snakes',
+          fr: 'Allez ${dir} vers les serpents',
+          cn: '向 ${dir} 蛇走',
+          ko: '${dir} 뱀 쪽으로 가기',
+        },
+        goToUnknownSnakes: {
+          en: 'Go Toward Snakes',
           fr: 'Allez vers les serpents',
-          ja: '蛇側へ',
-          cn: '靠近蛇蛇',
-          ko: '뱀쪽으로 이동',
+          cn: '向蛇走',
+          ko: '뱀 쪽으로 가기',
         },
         outOfMiddleTowardSnakes: {
-          en: 'Out of Middle, Toward Snakes',
-          de: 'Raus aus der Mitte, Zu den Schlangen',
-          fr: 'Sortez du milieu, vers les serpents',
-          ja: '真ん中からずれて蛇に向く',
-          cn: '靠近中间，击退向蛇蛇',
-          ko: '중앙 피하고 뱀쪽으로 밀리기',
+          en: 'Out Of Middle, Knockback To ${dir}',
+          fr: 'Loin du centre, Poussée vers ${dir}',
+          cn: '离开中间，击退到 ${dir}',
+          ko: '중앙 피하기, ${dir}으로 넉백',
+        },
+        outOfMiddleUnknownSnakes: {
+          en: 'Out Of Middle, Knockback Toward Snakes',
+          fr: 'Loin du centre, Poussée vers les serpents',
+          cn: '离开中间，向蛇击退',
+          ko: '중앙 피하기, 뱀 쪽으로 넉백',
         },
       },
     },
@@ -314,7 +321,7 @@ Options.Triggers.push({
     {
       id: 'SeiryuEx Swim Lessons',
       type: 'StartsUsing',
-      netRegex: { id: '37CB', source: 'Seiryu', capture: false },
+      netRegex: { id: '37CB', capture: false },
       delaySeconds: 28,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -332,12 +339,15 @@ Options.Triggers.push({
   timelineReplace: [
     {
       'locale': 'de',
+      'missingTranslations': true,
       'replaceSync': {
         'Aka-no-shiki': 'Aka no Shiki',
         'Ao-no-shiki': 'Ao no Shiki',
+        'Blue Orochi': 'blau[a] Orochi',
         'Iwa-no-shiki': 'Iwa no Shiki',
         'Numa-no-shiki': 'Numa no Shiki',
         'Seiryu': 'Seiryu',
+        'Ten-no-shiki': 'Ten no Shiki',
         'Yama-no-shiki': 'Yama no Shiki',
       },
       'replaceText': {
@@ -362,6 +372,7 @@ Options.Triggers.push({
         'Serpent\'s Fang': 'Schlangengiftzahn',
         'Strength of Spirit': 'Stärke des Geistes',
         'Summon Shiki': 'Shiki-Beschwörung ',
+        'Yama-kagura': 'Yamakagura',
       },
     },
     {
@@ -369,12 +380,16 @@ Options.Triggers.push({
       'replaceSync': {
         'Aka-no-shiki': 'shiki écarlate',
         'Ao-no-shiki': 'shiki céruléen',
+        'Blue Orochi': '"orochi azur',
         'Iwa-no-shiki': 'shiki rocailleux',
         'Numa-no-shiki': 'shiki uligineux',
         'Seiryu': 'Seiryû',
+        'Ten-no-shiki': 'shiki céleste',
         'Yama-no-shiki': 'shiki montagneux',
       },
       'replaceText': {
+        '--small adds spawn--': '--Apparition des petits adds--',
+        '--large add spawns--': '--Apparition des grands adds--',
         '100-tonze Swing': 'Swing de 100 tonz',
         'Blazing Aramitama': 'Aramitama incandescent',
         'Blue Bolt': 'Percée bleue',
@@ -396,16 +411,20 @@ Options.Triggers.push({
         'Serpent\'s Fang': 'Dent de serpent',
         'Strength of Spirit': 'Chakra',
         'Summon Shiki': 'Invocation de shiki',
+        'Yama-kagura': 'Yama-kagura',
       },
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
         'Aka-no-shiki': '紅の式鬼',
         'Ao-no-shiki': '蒼の式鬼',
+        'Blue Orochi': '青のオロチ',
         'Iwa-no-shiki': '岩の式鬼',
         'Numa-no-shiki': '沼の式鬼',
         'Seiryu': '青龍',
+        'Ten-no-shiki': '天の式鬼',
         'Yama-no-shiki': '山の式鬼',
       },
       'replaceText': {
@@ -430,6 +449,7 @@ Options.Triggers.push({
         'Serpent\'s Fang': '蛇牙',
         'Strength of Spirit': '霊気',
         'Summon Shiki': '式鬼召喚',
+        'Yama-kagura': '山神楽',
       },
     },
     {
@@ -437,12 +457,16 @@ Options.Triggers.push({
       'replaceSync': {
         'Aka-no-shiki': '红之式鬼',
         'Ao-no-shiki': '苍之式鬼',
+        'Blue Orochi': '青之大蛇',
         'Iwa-no-shiki': '岩之式鬼',
         'Numa-no-shiki': '沼之式鬼',
         'Seiryu': '青龙',
+        'Ten-no-shiki': '天之式鬼',
         'Yama-no-shiki': '山之式鬼',
       },
       'replaceText': {
+        '--small adds spawn--': '--小小怪生成--',
+        '--large add spawns--': '--大小怪生成--',
         '100-tonze Swing': '百吨回转',
         'Blazing Aramitama': '荒魂燃烧',
         'Blue Bolt': '青突进',
@@ -464,6 +488,7 @@ Options.Triggers.push({
         'Serpent\'s Fang': '蛇牙',
         'Strength of Spirit': '灵气',
         'Summon Shiki': '式鬼召唤',
+        'Yama-kagura': '山神乐',
       },
     },
     {
@@ -471,12 +496,16 @@ Options.Triggers.push({
       'replaceSync': {
         'Aka-no-shiki': '붉은 사역귀',
         'Ao-no-shiki': '푸른 사역귀',
+        'Blue Orochi': '푸른 이무기',
         'Iwa-no-shiki': '바위 사역귀',
         'Numa-no-shiki': '늪 사역귀',
         'Seiryu': '청룡',
+        'Ten-no-shiki': '하늘 사역귀',
         'Yama-no-shiki': '산 사역귀',
       },
       'replaceText': {
+        '--small adds spawn--': '--작은 쫄 등장--',
+        '--large add spawns--': '--큰 쫄 등장--',
         '100-tonze Swing': '100톤즈 휘두르기',
         'Blazing Aramitama': '아라미타마 연소',
         'Blue Bolt': '푸른 돌진',
@@ -498,6 +527,7 @@ Options.Triggers.push({
         'Serpent\'s Fang': '뱀송곳니',
         'Strength of Spirit': '영기',
         'Summon Shiki': '사역귀 소환',
+        'Yama-kagura': '산타령',
       },
     },
   ],

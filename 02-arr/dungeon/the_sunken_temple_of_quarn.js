@@ -5,6 +5,8 @@ Options.Triggers.push({
     en: 'pre-7.2 rework',
     de: 'Vor der 7.2 Überarbeitung',
     fr: 'Avant le remaniement 7.2',
+    cn: '7.2改版前',
+    ko: '7.2 개편 전',
   },
   triggers: [
     {

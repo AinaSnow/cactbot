@@ -1,0 +1,306 @@
+// List of events:
+// https://github.com/xivapi/ffxiv-datamining/blob/master/csv/DynamicEvent.csv
+//
+// These ids are (unfortunately) gathered by hand and don't seem to correlate
+// to any particular bits of data.  However, there's a game log message when you
+// register for a CE and an 0x21 message with this id when you accept and
+// teleport in.  This avoids having to translate all of these names and also
+// guarantees that the player is actually in the CE for the purpose of
+// filtering triggers.
+const ceIds = {
+  calamityBound: '32F',
+  companyOfStone: '343',
+  crawlingDeath: '330',
+  cursedConcern: '32B',
+  eternalWatch: '329',
+  flameOfDusk: '32A',
+  fromTimesBygone: '323',
+  noiseComplaint: '327',
+  onTheHunt: '338',
+  scourgeOfTheMind: '320',
+  sharkAttack: '32E',
+  theBlackRegiment: '322',
+  theUnbridled: '348',
+  trialByClaw: '349',
+  withExtremePredjudice: '339',
+};
+Options.Triggers.push({
+  id: 'TheOccultCrescentSouthHorn',
+  zoneId: ZoneId.TheOccultCrescentSouthHorn,
+  comments: {
+    en: 'Occult Crescent South Horn critical encounter triggers/timeline.',
+    cn: '蜃景幻界新月岛 南征之章 紧急遭遇战 触发器/时间轴。',
+    ko: '초승달 섬: 남부편 비상 조우 트리거/타임라인',
+  },
+  timelineFile: 'occult_crescent_south_horn.txt',
+  resetWhenOutOfCombat: false,
+  triggers: [
+    {
+      id: 'Occult Crescent Critical Encounter',
+      type: 'ActorControl',
+      netRegex: { command: '80000014' },
+      run: (data, matches) => {
+        // This fires when you win, lose, or teleport out.
+        if (matches.data0 === '00') {
+          if (data.ce !== undefined && data.options.Debug)
+            console.log(`Stop CE: ${data.ce}`);
+          // Stop any active timelines.
+          data.StopCombat();
+          // Prevent further triggers for any active CEs from firing.
+          delete data.ce;
+          return;
+        }
+        delete data.ce;
+        const ceId = matches.data0.toUpperCase();
+        for (const key in ceIds) {
+          if (ceIds[key] === ceId) {
+            if (data.options.Debug)
+              console.log(`Start CE: ${key} (${ceId})`);
+            data.ce = key;
+            return;
+          }
+        }
+        if (data.options.Debug)
+          console.log(`Start CE: ??? (${ceId})`);
+      },
+    },
+    {
+      id: 'Occult Crescent Cloister Demon Tidal Breath',
+      type: 'StartsUsing',
+      netRegex: { source: 'Cloister Demon', id: 'A190', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'Occult Crescent Berserker Scathing Sweep',
+      type: 'StartsUsing',
+      netRegex: { source: 'Crescent Berserker', id: 'A6C3', capture: false },
+      response: Responses.getBehind(),
+    },
+    {
+      id: 'Occult Crescent Hinkypunk Dread Dive',
+      type: 'StartsUsing',
+      netRegex: { source: 'Hinkypunk', id: 'A1A4', capture: true },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Occult Crescent Hinkypunk Shades Nest',
+      type: 'StartsUsing',
+      // TODO: Some of these are from boss, some are not.
+      netRegex: { source: 'Hinkypunk', id: ['A19C', 'A19D', 'A430', 'A431'], capture: true },
+      suppressSeconds: 1,
+      response: Responses.getIn(),
+      run: (_data, matches) => console.log(`Shades Nest: ${matches.id}`),
+    },
+    {
+      id: 'Occult Crescent Hinkypunk Shades Crossing',
+      type: 'StartsUsing',
+      // TODO: Some of these are from boss, some are not.
+      netRegex: { source: 'Hinkypunk', id: ['A19F', 'A1A0', 'A432', 'A433'], capture: true },
+      suppressSeconds: 1,
+      response: Responses.getIntercards(),
+      run: (_data, matches) => console.log(`Shades Nest: ${matches.id}`),
+    },
+    {
+      id: 'Occult Crescent Hinkypunk Lamplight',
+      type: 'StartsUsing',
+      netRegex: { source: 'Hinkypunk', id: ['A1A5', 'A310'], capture: false },
+      suppressSeconds: 1,
+      response: Responses.aoe(),
+    },
+    {
+      id: 'Occult Crescent Black Star Choco Windstorm',
+      type: 'StartsUsing',
+      netRegex: { source: 'Black Star', id: 'A0BB', capture: false },
+      response: Responses.getOut(),
+    },
+    {
+      id: 'Occult Crescent Black Star Choco Cyclone',
+      type: 'StartsUsing',
+      netRegex: { source: 'Black Star', id: 'A0BC', capture: false },
+      response: Responses.getIn(),
+    },
+    {
+      id: 'Occult Crescent Neo Garula Squash',
+      type: 'StartsUsing',
+      netRegex: { source: 'Neo Garula', id: 'A0E5', capture: true },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Occult Crescent Lion Rampant Fearsome Glint',
+      type: 'StartsUsing',
+      netRegex: { source: 'Lion Rampant', id: 'A1C3', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'Occult Crescent Death Claw Dirty Nails',
+      type: 'StartsUsing',
+      netRegex: { source: 'Death Claw', id: 'A174', capture: true },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Occult Crescent Death Claw Grip of Poison',
+      type: 'StartsUsing',
+      netRegex: { source: 'Death Claw', id: 'A175', capture: false },
+      response: Responses.bleedAoe(),
+    },
+    {
+      id: 'Occult Crescent Death Claw Vertical Crosshatch',
+      type: 'StartsUsing',
+      netRegex: { source: 'Death Claw', id: ['A16B', 'A172'], capture: false },
+      response: Responses.getSidesThenFrontBack('alert'),
+    },
+    {
+      id: 'Occult Crescent Death Claw Horizontal Crosshatch',
+      type: 'StartsUsing',
+      netRegex: { source: 'Death Claw', id: ['A16C', 'A173'], capture: false },
+      response: Responses.getFrontBackThenSides('alert'),
+    },
+    {
+      id: 'Occult Crescent Repaired Lion Holy Blaze',
+      type: 'StartsUsing',
+      netRegex: { source: 'Repaired Lion', id: 'A151', capture: false },
+      response: Responses.awayFromFront(),
+    },
+    {
+      id: 'Occult Crescent Repaired Lion Scratch',
+      type: 'StartsUsing',
+      netRegex: { source: 'Repaired Lion', id: 'A155', capture: true },
+      response: Responses.tankBuster(),
+    },
+    {
+      id: 'Occult Crescent Nymian Petalodus Hydrocleave',
+      type: 'StartsUsing',
+      netRegex: { source: 'Nymian Petalodus', id: 'A88D', capture: false },
+      response: Responses.awayFromFront(),
+    },
+  ],
+  timelineReplace: [
+    {
+      'locale': 'en',
+      'replaceText': {
+        'Vertical Crosshatch/Horizontal Crosshatch': 'Vertical/Horizontal Crosshatch',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Ball of Fire': '火球',
+        'Black Star': '黑色天星',
+        'Clawmarks': '抓痕',
+        'Cloister Demon': '回廊恶魔',
+        'Crescent Berserker': '新月狂战士',
+        'Crystal Dragon': '水晶龙',
+        'Death Claw': '死亡爪',
+        'Draconic Double': '水晶龙的幻影',
+        'Hinkypunk': '鬼火苗',
+        'Lion Rampant': '跃立狮',
+        'Neo Garula': '进化加鲁拉',
+        'Nymian Petalodus': '尼姆瓣齿鲨',
+        'Phantom Claw': '死亡爪的幻影',
+        'Repaired Lion': '复原狮像',
+      },
+      'replaceText': {
+        '\\(in\\)': '(内)',
+        '\\(jump\\)': '(跳)',
+        '\\(Lightning\\)': '(雷)',
+        '\\(out\\)': '(外)',
+        '\\(Wind\\)': '(风)',
+        'Bedrock Uplift': '地面隆起',
+        'Blazing Flare': '炽热核爆',
+        'Boil Over': '发怒',
+        'Channeled Rage': '燥怒',
+        'Clawing Shadow': '雾霾爪',
+        'Clawmarks': '抓痕',
+        'Crystal Call': '生成晶石',
+        'Crystal Mirror': '转移晶石',
+        'Crystallized Energy': '水晶波动',
+        'Dirty Nails': '腐坏爪',
+        'Explosion': '爆炸',
+        'Fearsome Facet': '幻影晶石',
+        'Gigaflare': '十亿核爆',
+        'Great Ball of Fire': '火球',
+        'Heated Outburst': '气焰',
+        'Heightened Rage': '狂怒',
+        'Hopping Mad': '震击怒涛',
+        'Horizontal Crosshatch': '横向双重抓',
+        'Karmic Drain': '生命侵蚀',
+        'Lethal Nails': '死亡甲',
+        'Made Magic': '释放魔力',
+        'Manifold Marks': '多重抓痕',
+        'Primal Roar': '大咆哮',
+        'Prismatic Wing': '水晶之翼',
+        'Raking Scratch': '尖甲疾袭',
+        'Scathing Sweep': '横砍',
+        'Seal Asunder': '封印破坏',
+        'Skulking Orders': '处刑令',
+        'Sunderseal Roar': '破封的咆哮',
+        'The Grip of Poison': '邪气的共振',
+        'Threefold Marks': '三重抓痕',
+        'Tidal Breath': '怒潮吐息',
+        'Vertical Crosshatch': '纵向双重抓',
+        'Void Thunder III': '虚空暴雷',
+        'White-hot Rage': '气焰怒涛',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Ball of Fire': '화염 구체',
+        'Black Star': '검은 죽음의 운성',
+        'Clawmarks': '손톱자국',
+        'Cloister Demon': '회랑 악마',
+        'Crescent Berserker': '초승달 광전사',
+        'Crystal Dragon': '수정룡',
+        'Death Claw': '죽음손아귀',
+        'Draconic Double': '수정룡의 환영',
+        'Hinkypunk': '힝키펑크',
+        'Lion Rampant': '직립 사자',
+        'Neo Garula': '네오 가루라',
+        'Nymian Petalodus': '니므 페탈로두스',
+        'Phantom Claw': '죽음손아귀의 환영',
+        'Repaired Lion': '복원된 사자',
+      },
+      'replaceText': {
+        '\\(in\\)': '(안)',
+        '\\(jump\\)': '(점프)',
+        '\\(Lightning\\)': '(번개)',
+        '\\(out\\)': '(밖)',
+        '\\(Wind\\)': '(바람)',
+        'Bedrock Uplift': '지반 융기',
+        'Blazing Flare': '플레어 작열',
+        'Boil Over': '노발',
+        'Channeled Rage': '진노',
+        'Clawing Shadow': '안개 발톱',
+        'Clawmarks': '손톱자국',
+        'Crystal Call': '수정석 생성',
+        'Crystal Mirror': '수정석 이동',
+        'Crystallized Energy': '수정 파동',
+        'Dirty Nails': '더러운 발톱',
+        'Explosion': '폭발',
+        'Fearsome Facet': '환영 수정석',
+        'Gigaflare': '기가플레어',
+        'Great Ball of Fire': '불덩이',
+        'Heated Outburst': '기염',
+        'Heightened Rage': '대진노',
+        'Hopping Mad': '노도의 도끼질',
+        'Karmic Drain': '생명 부식',
+        'Lethal Nails': '죽음의 손톱',
+        'Made Magic': '마력 방출',
+        'Manifold Marks': '다중 손톱자국',
+        'Primal Roar': '대포효',
+        'Prismatic Wing': '수정 날개',
+        'Raking Scratch': '연속 손톱',
+        'Scathing Sweep': '가로 후리기',
+        'Seal Asunder': '봉인 파괴',
+        'Skulking Orders': '처벌 지시',
+        'Sunderseal Roar': '해방의 포효',
+        'The Grip of Poison': '사악한 공명',
+        'Threefold Marks': '삼중 손톱자국',
+        'Tidal Breath': '해일 숨결',
+        'Vertical Crosshatch/Horizontal Crosshatch': '세로/가로 이중 손톱',
+        'Void Thunder III': '보이드 선더가',
+        'White-hot Rage': '노도의 기염',
+      },
+    },
+  ],
+});

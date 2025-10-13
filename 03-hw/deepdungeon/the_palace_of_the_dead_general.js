@@ -63,7 +63,7 @@ Options.Triggers.push({
     // ---------------- Pomanders ----------------
     {
       id: 'PotD General Pomander Duplicate',
-      // duplicate item message: https://xivapi.com/LogMessage/7222?pretty=true
+      // duplicate pomander message: https://v2.xivapi.com/api/sheet/LogMessage/7222
       // en: You return the pomander of ${pomander} to the coffer. You cannot carry any more of that item.
       type: 'SystemLogMessage',
       netRegex: { id: '1C36' },
@@ -101,12 +101,8 @@ Options.Triggers.push({
             return output.duplicate({ pomander: output.raising() });
           case 16:
             return output.duplicate({ pomander: output.resolution() });
-          case 17:
-            return output.duplicate({ pomander: output.frailty() });
-          case 18:
-            return output.duplicate({ pomander: output.concealment() });
-          case 19:
-            return output.duplicate({ pomander: output.petrification() });
+          default:
+            return output.duplicate({ pomander: output.unknown() });
         }
       },
       outputStrings: {
@@ -118,7 +114,7 @@ Options.Triggers.push({
           cn: '${pomander} 重复',
           ko: '${pomander} 중복',
         },
-        // pomanders: https://xivapi.com/deepdungeonItem?pretty=true
+        // pomanders: https://v2.xivapi.com/api/sheet/DeepDungeonItem
         safety: {
           en: 'Safety',
           de: 'Siegelbruchs',
@@ -247,37 +243,14 @@ Options.Triggers.push({
           cn: '基路伯化',
           ko: '쿠리부 변신',
         },
-        frailty: {
-          en: 'Frailty',
-          de: 'Feindschwächung',
-          fr: 'Incapacité',
-          ja: '敵弱体',
-          cn: '弱化敌人',
-          ko: '적 약화',
-        },
-        concealment: {
-          en: 'Concealment',
-          de: 'Verschwindens',
-          fr: 'Invisibilité',
-          ja: 'バニシュ',
-          cn: '隐形',
-          ko: '배니시',
-        },
-        petrification: {
-          en: 'Petrification',
-          de: 'Feindversteinerung',
-          fr: 'Pétrification',
-          ja: '敵石化',
-          cn: '石化敌人',
-          ko: '적 석화',
-        },
+        unknown: Outputs.unknown,
       },
     },
     // ---------------- Floor Notifications ----------------
     {
       id: 'PotD General Cairn of Passage',
       // portal to transfer between floors
-      // Cairn of Passage activation message: https://xivapi.com/LogMessage/7245?pretty=true
+      // Cairn of Passage activation message: https://v2.xivapi.com/api/sheet/LogMessage/7245
       // en: The Cairn of Passage is activated!
       type: 'SystemLogMessage',
       netRegex: { id: '1C4D', capture: false },

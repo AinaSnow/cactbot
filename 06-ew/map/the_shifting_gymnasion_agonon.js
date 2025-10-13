@@ -37,7 +37,9 @@ Options.Triggers.push({
   comments: {
     en: 'Missing several summons',
     de: 'Einige Beschwörungen fehlen',
+    fr: 'Quelques invocations manquantes',
     cn: '缺失几次召唤',
+    ko: '몇몇 소환 누락',
   },
   triggers: [
     // ---------------- random treasure mobs ----------------

@@ -23,6 +23,7 @@ Options.Triggers.push({
         text: {
           en: 'Away from falling pillar',
           de: 'Weg von der fallenden Säule',
+          fr: 'Éloignez-vous du pilier',
           cn: '远离柱子落点',
           ko: '기둥 추락지점에서 멀리 떨어지기',
         },
@@ -148,6 +149,7 @@ Options.Triggers.push({
         text: {
           en: 'Away from boss',
           de: 'Weg vom Boss',
+          fr: 'Éloignez-vous du boss',
           cn: '远离 BOSS',
           ko: '보스에게서 멀어지기',
         },
@@ -222,7 +224,6 @@ Options.Triggers.push({
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Lindblum Zaghnal': 'zaghnal de Lindblum',
         'Lunipyati': 'Lunipyati',
@@ -230,6 +231,13 @@ Options.Triggers.push({
         'Preserved Soul': 'âme préservée',
       },
       'replaceText': {
+        '\\(arcs\\)': '(Arcs)',
+        '\\(big\\)': '(Gros)',
+        '\\(multiple\\)': '(Multiple)',
+        '\\(spiral\\)': '(Spirale)',
+        '--adds 1 targetable--': '--Adds 1 ciblable--',
+        '--adds 2 targetable--': '--Adds 2 ciblable--',
+        '--adds 3 targetable--': '--Adds 3 ciblable--',
         'Beastly Roar': 'Rugissement bestial',
         'Bloodburst': 'Explosion sanguine',
         'Boulder Dance': 'Danse du roc',
@@ -306,16 +314,18 @@ Options.Triggers.push({
       'locale': 'cn',
       'replaceSync': {
         'Lindblum Zaghnal': '林德布鲁姆扎戈斧龙',
-        'Overseer Kanilokka': '卡尼洛喀站长',
         'Lunipyati': '鲁尼皮亚提',
+        'Overseer Kanilokka': '卡尼洛喀站长',
+        'Preserved Soul': '站员的亡魂',
       },
       'replaceText': {
         '\\(arcs\\)': '(弧线)',
         '\\(big\\)': '(大)',
         '\\(multiple\\)': '(多重)',
         '\\(spiral\\)': '(螺旋)',
-        '--adds': '--小怪',
-        '(?<!un)targetable--': '可选中--',
+        '--adds 1 targetable--': '--小怪 1 可选中--',
+        '--adds 2 targetable--': '--小怪 2 可选中--',
+        '--adds 3 targetable--': '--小怪 3 可选中--',
         'Beastly Roar': '残虐咆哮',
         'Bloodburst': '血爆',
         'Boulder Dance': '舞动的岩石',
