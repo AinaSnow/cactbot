@@ -49,7 +49,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Go Front + Right',
+          de: 'Geh nach Vorne + Rechts',
           cn: '去前面 + 右侧',
+          tc: '去前面 + 右側',
+          ko: '앞으로 + 오른쪽',
         },
       },
     },
@@ -61,7 +64,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Go Front + Left',
+          de: 'Geh nach Vorne + Links',
           cn: '去前面 + 左侧',
+          tc: '去前面 + 左側',
+          ko: '앞으로 + 왼쪽',
         },
       },
     },
@@ -78,6 +84,7 @@ Options.Triggers.push({
           fr: 'Masquez le champ de vision vers ${name}',
           ja: '${name}の視線から隠れる',
           cn: '利用掩体卡 ${name} 的视线',
+          tc: '利用掩體卡 ${name} 的視線',
           ko: '${name}의 시야 밖으로 숨기',
         },
       },
@@ -93,7 +100,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: '${count}x attacks => Out of Melee',
+          de: '${count}x Attacken => Raus aus Nahkampf',
           cn: '${count}次攻击 => 离开近战范围',
+          tc: '${count}次攻擊 => 離開近戰範圍',
+          ko: '${count}번 공격 => 근접 범위 밖으로',
         },
       },
     },
@@ -125,7 +135,10 @@ Options.Triggers.push({
       outputStrings: {
         text: {
           en: 'Avoid AoE',
+          de: 'Vermeide AoE',
           cn: '避开AoE',
+          tc: '避開AoE',
+          ko: '장판 피하기',
         },
       },
     },
@@ -180,5 +193,63 @@ Options.Triggers.push({
     },
     // ---------------- Stone 99 Boss: Eminent Grief/Devoured Eater ----------------
     // triggers in The Final Verse: pilgrims_traverse_the_final_verse.ts
+  ],
+  timelineReplace: [
+    {
+      'locale': 'de',
+      'replaceSync': {
+        'Invoked Acheron': 'gerufen(?:e|er|es|en) Acheron',
+        'Invoked Archaeodemon': 'gerufen(?:e|er|es|en) Archaeodämon',
+        'Invoked Bachelor': 'gerufen(?:e|er|es|en) Spinnrich',
+        'Invoked Dahak': 'gerufen(?:e|er|es|en) Dahak',
+        'Invoked Destrudo': 'gerufen(?:e|er|es|en) Destrudo',
+        'Invoked Dreamer': 'gerufen(?:e|er|es|en) bös(?:e|er|es|en) Träumer',
+        'Invoked Gusion': 'gerufen(?:e|er|es|en) Gusion',
+        'Invoked Poppet': 'gerufen(?:e|er|es|en) Puppe',
+        'Invoked Sawtooth': 'gerufen(?:e|er|es|en) Sägezahn',
+        'Traverse Malevolence': 'Wallfahrt-Böswilligkeit',
+        'Traverse Triffid': 'Wallfahrt-Triffid',
+        'Traverse Warg': 'Wallfahrt-Warg',
+        'Traverse Ya-te-veo': 'Wallfahrt-Yateveo',
+      },
+    },
+    {
+      'locale': 'fr',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Invoked Acheron': 'achéron invoqué',
+        'Invoked Archaeodemon': 'archéodémon invoqué',
+        'Invoked Bachelor': 'aranéide invoqué',
+        'Invoked Dahak': 'dahaka invoqué',
+        'Invoked Destrudo': 'destrudo invoqué',
+        'Invoked Dreamer': 'rêveur maudit invoqué',
+        'Invoked Gusion': 'gusion invoqué',
+        'Invoked Poppet': 'poupée invoquée',
+        'Invoked Sawtooth': 'dentata invoqué',
+        'Traverse Malevolence': 'malveillance du pèlerinage',
+        'Traverse Triffid': 'triffide du pèlerinage',
+        'Traverse Warg': 'warg du pèlerinage',
+        'Traverse Ya-te-veo': 'yateveo du pèlerinage',
+      },
+    },
+    {
+      'locale': 'ja',
+      'missingTranslations': true,
+      'replaceSync': {
+        'Invoked Acheron': 'インヴォークド・アケローン',
+        'Invoked Archaeodemon': 'インヴォークド・アルケオデーモン',
+        'Invoked Bachelor': 'インヴォークド・バチェラー',
+        'Invoked Dahak': 'インヴォークド・ダハーカ',
+        'Invoked Destrudo': 'インヴォークド・デストルドー',
+        'Invoked Dreamer': 'インヴォークド・ドリームエビル',
+        'Invoked Gusion': 'インヴォークド・グシオン',
+        'Invoked Poppet': 'インヴォークド・パペット',
+        'Invoked Sawtooth': 'インヴォークド・ソウトゥース',
+        'Traverse Malevolence': 'トラバース・マレヴォレンス',
+        'Traverse Triffid': 'トラバース・トリフィド',
+        'Traverse Warg': 'トラバース・ワーグ',
+        'Traverse Ya-te-veo': 'トラバース・ヤテベオ',
+      },
+    },
   ],
 });
